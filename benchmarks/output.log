@@ -1,0 +1,3007 @@
+ImageClassification(
+    crop_size=[224]
+    resize_size=[256]
+    mean=[0.485, 0.456, 0.406]
+    std=[0.229, 0.224, 0.225]
+    interpolation=InterpolationMode.BILINEAR
+)
+Step:  0
+load ../img/input1.jpg
+Preprocessing
+* Torch: 96917.62924194336 us
+Upload to GPU
+* GPU load: 2914588.9282226562 us
+GPU computation
+* GPU compute: 4176804.304122925 us
+
+
+Step:  1
+load ../img/input2.jpg
+Preprocessing
+* Torch: 434812.3073577881 us
+Upload to GPU
+* GPU load: 114.67933654785156 us
+GPU computation
+* GPU compute: 27055.740356445312 us
+
+
+Step:  2
+load ../img/input3.jpg
+Preprocessing
+* Torch: 429765.2244567871 us
+Upload to GPU
+* GPU load: 245.09429931640625 us
+GPU computation
+* GPU compute: 32044.88754272461 us
+
+
+Step:  3
+load ../img/input4.jpg
+Preprocessing
+* Torch: 341655.4927825928 us
+Upload to GPU
+* GPU load: 258.44573974609375 us
+GPU computation
+* GPU compute: 32542.22869873047 us
+
+
+Step:  4
+load ../img/input5.jpg
+Preprocessing
+* Torch: 378685.71281433105 us
+Upload to GPU
+* GPU load: 246.7632293701172 us
+GPU computation
+* GPU compute: 32087.087631225586 us
+
+
+Step:  5
+load ../img/input6.jpg
+Preprocessing
+* Torch: 342094.42138671875 us
+Upload to GPU
+* GPU load: 276.0887145996094 us
+GPU computation
+* GPU compute: 32006.502151489258 us
+
+
+Step:  6
+load ../img/input7.jpg
+Preprocessing
+* Torch: 316072.2255706787 us
+Upload to GPU
+* GPU load: 269.6514129638672 us
+GPU computation
+* GPU compute: 32006.025314331055 us
+
+
+Step:  7
+load ../img/input8.jpg
+Preprocessing
+* Torch: 418848.27613830566 us
+Upload to GPU
+* GPU load: 250.10108947753906 us
+GPU computation
+* GPU compute: 32284.975051879883 us
+
+
+Step:  8
+load ../img/input9.jpg
+Preprocessing
+* Torch: 324501.51443481445 us
+Upload to GPU
+* GPU load: 268.2209014892578 us
+GPU computation
+* GPU compute: 32217.025756835938 us
+
+
+Step:  9
+load ../img/input10.jpg
+Preprocessing
+* Torch: 428537.60719299316 us
+Upload to GPU
+* GPU load: 266.07513427734375 us
+GPU computation
+* GPU compute: 32084.46502685547 us
+
+
+Step:  10
+load ../img/input11.jpg
+Preprocessing
+* Torch: 331534.86251831055 us
+Upload to GPU
+* GPU load: 256.0615539550781 us
+GPU computation
+* GPU compute: 32172.203063964844 us
+
+
+Step:  11
+load ../img/input12.jpg
+Preprocessing
+* Torch: 312204.83779907227 us
+Upload to GPU
+* GPU load: 250.5779266357422 us
+GPU computation
+* GPU compute: 32213.687896728516 us
+
+
+Step:  12
+load ../img/input13.jpg
+Preprocessing
+* Torch: 54756.879806518555 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5845.308303833008 us
+
+
+Step:  13
+load ../img/input14.jpg
+Preprocessing
+* Torch: 67941.42723083496 us
+Upload to GPU
+* GPU load: 179.52919006347656 us
+GPU computation
+* GPU compute: 6066.560745239258 us
+
+
+Step:  14
+load ../img/input15.jpg
+Preprocessing
+* Torch: 64841.74728393555 us
+Upload to GPU
+* GPU load: 167.36984252929688 us
+GPU computation
+* GPU compute: 5833.38737487793 us
+
+
+Step:  15
+load ../img/input16.jpg
+Preprocessing
+* Torch: 59115.17143249512 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5818.367004394531 us
+
+
+Step:  16
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72752.71415710449 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5903.482437133789 us
+
+
+Step:  17
+load ../img/input18.jpg
+Preprocessing
+* Torch: 70234.77554321289 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5853.6529541015625 us
+
+
+Step:  18
+load ../img/input19.jpg
+Preprocessing
+* Torch: 67782.16361999512 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5883.216857910156 us
+
+
+Step:  19
+load ../img/input20.jpg
+Preprocessing
+* Torch: 66737.17498779297 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5847.930908203125 us
+
+
+Step:  20
+load ../img/input1.jpg
+Preprocessing
+* Torch: 64923.763275146484 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5852.699279785156 us
+
+
+Step:  21
+load ../img/input2.jpg
+Preprocessing
+* Torch: 67461.49063110352 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5832.195281982422 us
+
+
+Step:  22
+load ../img/input3.jpg
+Preprocessing
+* Torch: 73084.11598205566 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5826.473236083984 us
+
+
+Step:  23
+load ../img/input4.jpg
+Preprocessing
+* Torch: 58377.742767333984 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5867.242813110352 us
+
+
+Step:  24
+load ../img/input5.jpg
+Preprocessing
+* Torch: 65580.36804199219 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5858.898162841797 us
+
+
+Step:  25
+load ../img/input6.jpg
+Preprocessing
+* Torch: 63006.40106201172 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5891.084671020508 us
+
+
+Step:  26
+load ../img/input7.jpg
+Preprocessing
+* Torch: 57968.854904174805 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5805.253982543945 us
+
+
+Step:  27
+load ../img/input8.jpg
+Preprocessing
+* Torch: 73345.18432617188 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5826.711654663086 us
+
+
+Step:  28
+load ../img/input9.jpg
+Preprocessing
+* Torch: 57182.78884887695 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5815.267562866211 us
+
+
+Step:  29
+load ../img/input10.jpg
+Preprocessing
+* Torch: 74862.95700073242 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5825.042724609375 us
+
+
+Step:  30
+load ../img/input11.jpg
+Preprocessing
+* Torch: 59494.972229003906 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5838.871002197266 us
+
+
+Step:  31
+load ../img/input12.jpg
+Preprocessing
+* Torch: 57273.38790893555 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5863.428115844727 us
+
+
+Step:  32
+load ../img/input13.jpg
+Preprocessing
+* Torch: 58305.50193786621 us
+Upload to GPU
+* GPU load: 158.54835510253906 us
+GPU computation
+* GPU compute: 5829.095840454102 us
+
+
+Step:  33
+load ../img/input14.jpg
+Preprocessing
+* Torch: 67012.54844665527 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5883.216857910156 us
+
+
+Step:  34
+load ../img/input15.jpg
+Preprocessing
+* Torch: 64578.05633544922 us
+Upload to GPU
+* GPU load: 167.60826110839844 us
+GPU computation
+* GPU compute: 5814.552307128906 us
+
+
+Step:  35
+load ../img/input16.jpg
+Preprocessing
+* Torch: 58677.43492126465 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5864.143371582031 us
+
+
+Step:  36
+load ../img/input17.jpg
+Preprocessing
+* Torch: 73789.35813903809 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5874.6337890625 us
+
+
+Step:  37
+load ../img/input18.jpg
+Preprocessing
+* Torch: 67600.48866271973 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5877.256393432617 us
+
+
+Step:  38
+load ../img/input19.jpg
+Preprocessing
+* Torch: 67559.95750427246 us
+Upload to GPU
+* GPU load: 169.27719116210938 us
+GPU computation
+* GPU compute: 5851.74560546875 us
+
+
+Step:  39
+load ../img/input20.jpg
+Preprocessing
+* Torch: 64225.196838378906 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5890.130996704102 us
+
+
+Step:  40
+load ../img/input1.jpg
+Preprocessing
+* Torch: 64569.23484802246 us
+Upload to GPU
+* GPU load: 166.6545867919922 us
+GPU computation
+* GPU compute: 5845.069885253906 us
+
+
+Step:  41
+load ../img/input2.jpg
+Preprocessing
+* Torch: 69886.2075805664 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5830.526351928711 us
+
+
+Step:  42
+load ../img/input3.jpg
+Preprocessing
+* Torch: 73015.21301269531 us
+Upload to GPU
+* GPU load: 174.52239990234375 us
+GPU computation
+* GPU compute: 5880.3558349609375 us
+
+
+Step:  43
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59887.88604736328 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5859.136581420898 us
+
+
+Step:  44
+load ../img/input5.jpg
+Preprocessing
+* Torch: 67081.92825317383 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5844.831466674805 us
+
+
+Step:  45
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64334.15412902832 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5828.380584716797 us
+
+
+Step:  46
+load ../img/input7.jpg
+Preprocessing
+* Torch: 56765.079498291016 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5864.858627319336 us
+
+
+Step:  47
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72584.15222167969 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5870.819091796875 us
+
+
+Step:  48
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56209.564208984375 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5834.817886352539 us
+
+
+Step:  49
+load ../img/input10.jpg
+Preprocessing
+* Torch: 71587.80097961426 us
+Upload to GPU
+* GPU load: 170.23086547851562 us
+GPU computation
+* GPU compute: 5876.5411376953125 us
+
+
+Step:  50
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58395.6241607666 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5806.207656860352 us
+
+
+Step:  51
+load ../img/input12.jpg
+Preprocessing
+* Torch: 53866.62483215332 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5901.813507080078 us
+
+
+Step:  52
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57200.43182373047 us
+Upload to GPU
+* GPU load: 170.23086547851562 us
+GPU computation
+* GPU compute: 5850.315093994141 us
+
+
+Step:  53
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68323.85063171387 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5868.196487426758 us
+
+
+Step:  54
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63461.3037109375 us
+Upload to GPU
+* GPU load: 167.60826110839844 us
+GPU computation
+* GPU compute: 5976.676940917969 us
+
+
+Step:  55
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60358.04748535156 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5837.202072143555 us
+
+
+Step:  56
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72700.50048828125 us
+Upload to GPU
+* GPU load: 167.8466796875 us
+GPU computation
+* GPU compute: 5859.375 us
+
+
+Step:  57
+load ../img/input18.jpg
+Preprocessing
+* Torch: 68996.19102478027 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5889.892578125 us
+
+
+Step:  58
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66736.69815063477 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5873.203277587891 us
+
+
+Step:  59
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65638.30375671387 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5842.685699462891 us
+
+
+Step:  60
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63680.64880371094 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5894.184112548828 us
+
+
+Step:  61
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68683.14743041992 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5896.806716918945 us
+
+
+Step:  62
+load ../img/input3.jpg
+Preprocessing
+* Torch: 74799.0608215332 us
+Upload to GPU
+* GPU load: 166.17774963378906 us
+GPU computation
+* GPU compute: 5826.9500732421875 us
+
+
+Step:  63
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59775.11405944824 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5843.639373779297 us
+
+
+Step:  64
+load ../img/input5.jpg
+Preprocessing
+* Torch: 67023.75411987305 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5831.003189086914 us
+
+
+Step:  65
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64436.67411804199 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5919.933319091797 us
+
+
+Step:  66
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54287.67204284668 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5874.156951904297 us
+
+
+Step:  67
+load ../img/input8.jpg
+Preprocessing
+* Torch: 69839.4775390625 us
+Upload to GPU
+* GPU load: 167.36984252929688 us
+GPU computation
+* GPU compute: 5897.045135498047 us
+
+
+Step:  68
+load ../img/input9.jpg
+Preprocessing
+* Torch: 53720.47424316406 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5909.919738769531 us
+
+
+Step:  69
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73844.67124938965 us
+Upload to GPU
+* GPU load: 166.41616821289062 us
+GPU computation
+* GPU compute: 5872.488021850586 us
+
+
+Step:  70
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58680.77278137207 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5896.329879760742 us
+
+
+Step:  71
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56413.17367553711 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5901.575088500977 us
+
+
+Step:  72
+load ../img/input13.jpg
+Preprocessing
+* Torch: 54724.693298339844 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5878.210067749023 us
+
+
+Step:  73
+load ../img/input14.jpg
+Preprocessing
+* Torch: 65932.9891204834 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5911.827087402344 us
+
+
+Step:  74
+load ../img/input15.jpg
+Preprocessing
+* Torch: 61063.528060913086 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5873.918533325195 us
+
+
+Step:  75
+load ../img/input16.jpg
+Preprocessing
+* Torch: 57664.87121582031 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5916.118621826172 us
+
+
+Step:  76
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72745.80001831055 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5874.156951904297 us
+
+
+Step:  77
+load ../img/input18.jpg
+Preprocessing
+* Torch: 66733.36029052734 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5886.554718017578 us
+
+
+Step:  78
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66815.85311889648 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5869.865417480469 us
+
+
+Step:  79
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65634.72747802734 us
+Upload to GPU
+* GPU load: 166.41616821289062 us
+GPU computation
+* GPU compute: 5851.984024047852 us
+
+
+Step:  80
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63697.81494140625 us
+Upload to GPU
+* GPU load: 158.3099365234375 us
+GPU computation
+* GPU compute: 5854.606628417969 us
+
+
+Step:  81
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68791.38946533203 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5836.009979248047 us
+
+
+Step:  82
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72242.02156066895 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5867.719650268555 us
+
+
+Step:  83
+load ../img/input4.jpg
+Preprocessing
+* Torch: 57424.54528808594 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5900.382995605469 us
+
+
+Step:  84
+load ../img/input5.jpg
+Preprocessing
+* Torch: 64500.33187866211 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5902.767181396484 us
+
+
+Step:  85
+load ../img/input6.jpg
+Preprocessing
+* Torch: 61847.44834899902 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5892.515182495117 us
+
+
+Step:  86
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54326.05743408203 us
+Upload to GPU
+* GPU load: 160.69412231445312 us
+GPU computation
+* GPU compute: 5898.952484130859 us
+
+
+Step:  87
+load ../img/input8.jpg
+Preprocessing
+* Torch: 69896.22116088867 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5928.277969360352 us
+
+
+Step:  88
+load ../img/input9.jpg
+Preprocessing
+* Torch: 53595.542907714844 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5927.085876464844 us
+
+
+Step:  89
+load ../img/input10.jpg
+Preprocessing
+* Torch: 71424.96109008789 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5904.436111450195 us
+
+
+Step:  90
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58298.587799072266 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5860.090255737305 us
+
+
+Step:  91
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56252.479553222656 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5880.594253540039 us
+
+
+Step:  92
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57253.360748291016 us
+Upload to GPU
+* GPU load: 166.41616821289062 us
+GPU computation
+* GPU compute: 5806.446075439453 us
+
+
+Step:  93
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68387.50839233398 us
+Upload to GPU
+* GPU load: 163.79356384277344 us
+GPU computation
+* GPU compute: 5909.919738769531 us
+
+
+Step:  94
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63398.122787475586 us
+Upload to GPU
+* GPU load: 165.9393310546875 us
+GPU computation
+* GPU compute: 5820.274353027344 us
+
+
+Step:  95
+load ../img/input16.jpg
+Preprocessing
+* Torch: 59993.26705932617 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5869.626998901367 us
+
+
+Step:  96
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72793.72215270996 us
+Upload to GPU
+* GPU load: 169.27719116210938 us
+GPU computation
+* GPU compute: 5862.47444152832 us
+
+
+Step:  97
+load ../img/input18.jpg
+Preprocessing
+* Torch: 69022.17864990234 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5830.526351928711 us
+
+
+Step:  98
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66767.21572875977 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5897.760391235352 us
+
+
+Step:  99
+load ../img/input20.jpg
+Preprocessing
+* Torch: 63123.94142150879 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5877.017974853516 us
+
+
+Step:  100
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63477.516174316406 us
+Upload to GPU
+* GPU load: 166.6545867919922 us
+GPU computation
+* GPU compute: 5841.255187988281 us
+
+
+Step:  101
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68809.98611450195 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5905.628204345703 us
+
+
+Step:  102
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72539.09111022949 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5885.601043701172 us
+
+
+Step:  103
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59773.44512939453 us
+Upload to GPU
+* GPU load: 167.60826110839844 us
+GPU computation
+* GPU compute: 5845.546722412109 us
+
+
+Step:  104
+load ../img/input5.jpg
+Preprocessing
+* Torch: 66902.39906311035 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5835.771560668945 us
+
+
+Step:  105
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64391.8514251709 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5878.925323486328 us
+
+
+Step:  106
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54323.434829711914 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5878.210067749023 us
+
+
+Step:  107
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72212.45765686035 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5843.639373779297 us
+
+
+Step:  108
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56132.31658935547 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5896.091461181641 us
+
+
+Step:  109
+load ../img/input10.jpg
+Preprocessing
+* Torch: 71422.81532287598 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5919.933319091797 us
+
+
+Step:  110
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58429.47959899902 us
+Upload to GPU
+* GPU load: 167.60826110839844 us
+GPU computation
+* GPU compute: 5833.864212036133 us
+
+
+Step:  111
+load ../img/input12.jpg
+Preprocessing
+* Torch: 53901.91078186035 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5915.164947509766 us
+
+
+Step:  112
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57288.408279418945 us
+Upload to GPU
+* GPU load: 165.9393310546875 us
+GPU computation
+* GPU compute: 5847.692489624023 us
+
+
+Step:  113
+load ../img/input14.jpg
+Preprocessing
+* Torch: 66005.70678710938 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5885.36262512207 us
+
+
+Step:  114
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63540.22026062012 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5817.890167236328 us
+
+
+Step:  115
+load ../img/input16.jpg
+Preprocessing
+* Torch: 57561.87438964844 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5885.601043701172 us
+
+
+Step:  116
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72691.20216369629 us
+Upload to GPU
+* GPU load: 164.27040100097656 us
+GPU computation
+* GPU compute: 5849.361419677734 us
+
+
+Step:  117
+load ../img/input18.jpg
+Preprocessing
+* Torch: 66701.65061950684 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5871.772766113281 us
+
+
+Step:  118
+load ../img/input19.jpg
+Preprocessing
+* Torch: 69298.50578308105 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5815.029144287109 us
+
+
+Step:  119
+load ../img/input20.jpg
+Preprocessing
+* Torch: 63054.561614990234 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5887.031555175781 us
+
+
+Step:  120
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63537.1208190918 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5838.632583618164 us
+
+
+Step:  121
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68805.93299865723 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5913.019180297852 us
+
+
+Step:  122
+load ../img/input3.jpg
+Preprocessing
+* Torch: 74741.36352539062 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5829.334259033203 us
+
+
+Step:  123
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59688.09127807617 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5845.546722412109 us
+
+
+Step:  124
+load ../img/input5.jpg
+Preprocessing
+* Torch: 64467.19169616699 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5866.765975952148 us
+
+
+Step:  125
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64527.51159667969 us
+Upload to GPU
+* GPU load: 176.6681671142578 us
+GPU computation
+* GPU compute: 5906.105041503906 us
+
+
+Step:  126
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54488.6589050293 us
+Upload to GPU
+* GPU load: 175.23765563964844 us
+GPU computation
+* GPU compute: 5860.805511474609 us
+
+
+Step:  127
+load ../img/input8.jpg
+Preprocessing
+* Torch: 69891.92962646484 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5866.765975952148 us
+
+
+Step:  128
+load ../img/input9.jpg
+Preprocessing
+* Torch: 53714.51377868652 us
+Upload to GPU
+* GPU load: 175.23765563964844 us
+GPU computation
+* GPU compute: 5917.072296142578 us
+
+
+Step:  129
+load ../img/input10.jpg
+Preprocessing
+* Torch: 71374.41635131836 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5878.448486328125 us
+
+
+Step:  130
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58319.807052612305 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5830.287933349609 us
+
+
+Step:  131
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56176.185607910156 us
+Upload to GPU
+* GPU load: 174.99923706054688 us
+GPU computation
+* GPU compute: 5909.68132019043 us
+
+
+Step:  132
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57364.463806152344 us
+Upload to GPU
+* GPU load: 174.2839813232422 us
+GPU computation
+* GPU compute: 5866.765975952148 us
+
+
+Step:  133
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68422.79434204102 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5938.291549682617 us
+
+
+Step:  134
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63520.193099975586 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5809.307098388672 us
+
+
+Step:  135
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60075.28305053711 us
+Upload to GPU
+* GPU load: 164.27040100097656 us
+GPU computation
+* GPU compute: 5872.249603271484 us
+
+
+Step:  136
+load ../img/input17.jpg
+Preprocessing
+* Torch: 75035.33363342285 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5886.077880859375 us
+
+
+Step:  137
+load ../img/input18.jpg
+Preprocessing
+* Torch: 69181.68067932129 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5805.96923828125 us
+
+
+Step:  138
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66929.57878112793 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5924.701690673828 us
+
+
+Step:  139
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65713.16719055176 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5844.831466674805 us
+
+
+Step:  140
+load ../img/input1.jpg
+Preprocessing
+* Torch: 61275.24375915527 us
+Upload to GPU
+* GPU load: 161.88621520996094 us
+GPU computation
+* GPU compute: 5853.414535522461 us
+
+
+Step:  141
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68924.9038696289 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5852.460861206055 us
+
+
+Step:  142
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72397.23205566406 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5866.289138793945 us
+
+
+Step:  143
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59645.652770996094 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5858.421325683594 us
+
+
+Step:  144
+load ../img/input5.jpg
+Preprocessing
+* Torch: 64577.341079711914 us
+Upload to GPU
+* GPU load: 180.24444580078125 us
+GPU computation
+* GPU compute: 5884.1705322265625 us
+
+
+Step:  145
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64412.832260131836 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5813.837051391602 us
+
+
+Step:  146
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54323.91166687012 us
+Upload to GPU
+* GPU load: 175.71449279785156 us
+GPU computation
+* GPU compute: 5895.376205444336 us
+
+
+Step:  147
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72258.47244262695 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5850.076675415039 us
+
+
+Step:  148
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56077.48031616211 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5878.448486328125 us
+
+
+Step:  149
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73860.16845703125 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5842.685699462891 us
+
+
+Step:  150
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58486.223220825195 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5845.785140991211 us
+
+
+Step:  151
+load ../img/input12.jpg
+Preprocessing
+* Torch: 53825.61683654785 us
+Upload to GPU
+* GPU load: 176.6681671142578 us
+GPU computation
+* GPU compute: 5906.343460083008 us
+
+
+Step:  152
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57291.269302368164 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5866.289138793945 us
+
+
+Step:  153
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68474.29275512695 us
+Upload to GPU
+* GPU load: 174.2839813232422 us
+GPU computation
+* GPU compute: 5877.494812011719 us
+
+
+Step:  154
+load ../img/input15.jpg
+Preprocessing
+* Torch: 61002.492904663086 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5891.561508178711 us
+
+
+Step:  155
+load ../img/input16.jpg
+Preprocessing
+* Torch: 57678.937911987305 us
+Upload to GPU
+* GPU load: 176.1913299560547 us
+GPU computation
+* GPU compute: 5884.408950805664 us
+
+
+Step:  156
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72741.74690246582 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5881.071090698242 us
+
+
+Step:  157
+load ../img/input18.jpg
+Preprocessing
+* Torch: 68951.84516906738 us
+Upload to GPU
+* GPU load: 174.99923706054688 us
+GPU computation
+* GPU compute: 5877.256393432617 us
+
+
+Step:  158
+load ../img/input19.jpg
+Preprocessing
+* Torch: 69419.38400268555 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5810.022354125977 us
+
+
+Step:  159
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65748.69155883789 us
+Upload to GPU
+* GPU load: 161.64779663085938 us
+GPU computation
+* GPU compute: 5832.195281982422 us
+
+
+Step:  160
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63597.44071960449 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5839.58625793457 us
+
+
+Step:  161
+load ../img/input2.jpg
+Preprocessing
+* Torch: 66283.4644317627 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5879.402160644531 us
+
+
+Step:  162
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72212.21923828125 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5842.924118041992 us
+
+
+Step:  163
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59753.8948059082 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5865.573883056641 us
+
+
+Step:  164
+load ../img/input5.jpg
+Preprocessing
+* Torch: 67259.07325744629 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5827.903747558594 us
+
+
+Step:  165
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64315.3190612793 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5836.48681640625 us
+
+
+Step:  166
+load ../img/input7.jpg
+Preprocessing
+* Torch: 56851.863861083984 us
+Upload to GPU
+* GPU load: 174.7608184814453 us
+GPU computation
+* GPU compute: 5869.865417480469 us
+
+
+Step:  167
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72308.06350708008 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5822.658538818359 us
+
+
+Step:  168
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56198.3585357666 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5874.395370483398 us
+
+
+Step:  169
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73980.09300231934 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5854.84504699707 us
+
+
+Step:  170
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58371.782302856445 us
+Upload to GPU
+* GPU load: 174.99923706054688 us
+GPU computation
+* GPU compute: 5906.820297241211 us
+
+
+Step:  171
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56199.55062866211 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5841.970443725586 us
+
+
+Step:  172
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57159.423828125 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5826.9500732421875 us
+
+
+Step:  173
+load ../img/input14.jpg
+Preprocessing
+* Torch: 69357.39517211914 us
+Upload to GPU
+* GPU load: 174.04556274414062 us
+GPU computation
+* GPU compute: 5793.571472167969 us
+
+
+Step:  174
+load ../img/input15.jpg
+Preprocessing
+* Torch: 64533.71047973633 us
+Upload to GPU
+* GPU load: 174.2839813232422 us
+GPU computation
+* GPU compute: 5808.353424072266 us
+
+
+Step:  175
+load ../img/input16.jpg
+Preprocessing
+* Torch: 61179.63790893555 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5870.10383605957 us
+
+
+Step:  176
+load ../img/input17.jpg
+Preprocessing
+* Torch: 76143.50318908691 us
+Upload to GPU
+* GPU load: 161.88621520996094 us
+GPU computation
+* GPU compute: 5823.612213134766 us
+
+
+Step:  177
+load ../img/input18.jpg
+Preprocessing
+* Torch: 70058.34579467773 us
+Upload to GPU
+* GPU load: 167.60826110839844 us
+GPU computation
+* GPU compute: 5825.996398925781 us
+
+
+Step:  178
+load ../img/input19.jpg
+Preprocessing
+* Torch: 70156.09741210938 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5826.711654663086 us
+
+
+Step:  179
+load ../img/input20.jpg
+Preprocessing
+* Torch: 66634.4165802002 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5787.61100769043 us
+
+
+Step:  180
+load ../img/input1.jpg
+Preprocessing
+* Torch: 64722.537994384766 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5824.32746887207 us
+
+
+Step:  181
+load ../img/input2.jpg
+Preprocessing
+* Torch: 69051.02729797363 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5925.416946411133 us
+
+
+Step:  182
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72167.87338256836 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5859.613418579102 us
+
+
+Step:  183
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59890.2702331543 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5903.005599975586 us
+
+
+Step:  184
+load ../img/input5.jpg
+Preprocessing
+* Torch: 67072.86834716797 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5856.27555847168 us
+
+
+Step:  185
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64317.22640991211 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5877.73323059082 us
+
+
+Step:  186
+load ../img/input7.jpg
+Preprocessing
+* Torch: 54316.28227233887 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5876.5411376953125 us
+
+
+Step:  187
+load ../img/input8.jpg
+Preprocessing
+* Torch: 70971.25053405762 us
+Upload to GPU
+* GPU load: 158.78677368164062 us
+GPU computation
+* GPU compute: 5893.468856811523 us
+
+
+Step:  188
+load ../img/input9.jpg
+Preprocessing
+* Torch: 54775.95329284668 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5907.0587158203125 us
+
+
+Step:  189
+load ../img/input10.jpg
+Preprocessing
+* Torch: 72421.31233215332 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5850.315093994141 us
+
+
+Step:  190
+load ../img/input11.jpg
+Preprocessing
+* Torch: 59668.779373168945 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5797.863006591797 us
+
+
+Step:  191
+load ../img/input12.jpg
+Preprocessing
+* Torch: 57368.99375915527 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5814.790725708008 us
+
+
+Step:  192
+load ../img/input13.jpg
+Preprocessing
+* Torch: 55815.696716308594 us
+Upload to GPU
+* GPU load: 175.95291137695312 us
+GPU computation
+* GPU compute: 5869.388580322266 us
+
+
+Step:  193
+load ../img/input14.jpg
+Preprocessing
+* Torch: 69523.33450317383 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5836.725234985352 us
+
+
+Step:  194
+load ../img/input15.jpg
+Preprocessing
+* Torch: 64383.98361206055 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5834.817886352539 us
+
+
+Step:  195
+load ../img/input16.jpg
+Preprocessing
+* Torch: 61106.204986572266 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5819.797515869141 us
+
+
+Step:  196
+load ../img/input17.jpg
+Preprocessing
+* Torch: 76167.34504699707 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5810.976028442383 us
+
+
+Step:  197
+load ../img/input18.jpg
+Preprocessing
+* Torch: 67657.470703125 us
+Upload to GPU
+* GPU load: 175.95291137695312 us
+GPU computation
+* GPU compute: 5886.79313659668 us
+
+
+Step:  198
+load ../img/input19.jpg
+Preprocessing
+* Torch: 70279.12139892578 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5831.241607666016 us
+
+
+Step:  199
+load ../img/input20.jpg
+Preprocessing
+* Torch: 66707.84950256348 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5845.069885253906 us
+
+
+Step:  200
+load ../img/input1.jpg
+Preprocessing
+* Torch: 64602.37503051758 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5819.797515869141 us
+
+
+Step:  201
+load ../img/input2.jpg
+Preprocessing
+* Torch: 69835.42442321777 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5841.493606567383 us
+
+
+Step:  202
+load ../img/input3.jpg
+Preprocessing
+* Torch: 75806.3793182373 us
+Upload to GPU
+* GPU load: 171.661376953125 us
+GPU computation
+* GPU compute: 5806.446075439453 us
+
+
+Step:  203
+load ../img/input4.jpg
+Preprocessing
+* Torch: 60851.8123626709 us
+Upload to GPU
+* GPU load: 174.2839813232422 us
+GPU computation
+* GPU compute: 5840.778350830078 us
+
+
+Step:  204
+load ../img/input5.jpg
+Preprocessing
+* Torch: 68084.0015411377 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5822.420120239258 us
+
+
+Step:  205
+load ../img/input6.jpg
+Preprocessing
+* Torch: 65354.108810424805 us
+Upload to GPU
+* GPU load: 175.47607421875 us
+GPU computation
+* GPU compute: 5829.811096191406 us
+
+
+Step:  206
+load ../img/input7.jpg
+Preprocessing
+* Torch: 57849.884033203125 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5838.871002197266 us
+
+
+Step:  207
+load ../img/input8.jpg
+Preprocessing
+* Torch: 73332.30972290039 us
+Upload to GPU
+* GPU load: 174.99923706054688 us
+GPU computation
+* GPU compute: 5831.718444824219 us
+
+
+Step:  208
+load ../img/input9.jpg
+Preprocessing
+* Torch: 57167.53005981445 us
+Upload to GPU
+* GPU load: 176.6681671142578 us
+GPU computation
+* GPU compute: 5861.2823486328125 us
+
+
+Step:  209
+load ../img/input10.jpg
+Preprocessing
+* Torch: 74910.87913513184 us
+Upload to GPU
+* GPU load: 176.1913299560547 us
+GPU computation
+* GPU compute: 5862.47444152832 us
+
+
+Step:  210
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58287.38212585449 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5892.276763916016 us
+
+
+Step:  211
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56146.14486694336 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5852.937698364258 us
+
+
+Step:  212
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57283.878326416016 us
+Upload to GPU
+* GPU load: 173.09188842773438 us
+GPU computation
+* GPU compute: 5851.74560546875 us
+
+
+Step:  213
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68384.64736938477 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5884.647369384766 us
+
+
+Step:  214
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63440.32287597656 us
+Upload to GPU
+* GPU load: 175.47607421875 us
+GPU computation
+* GPU compute: 5885.124206542969 us
+
+
+Step:  215
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60106.99272155762 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5853.891372680664 us
+
+
+Step:  216
+load ../img/input17.jpg
+Preprocessing
+* Torch: 75676.20277404785 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5822.181701660156 us
+
+
+Step:  217
+load ../img/input18.jpg
+Preprocessing
+* Torch: 68969.9649810791 us
+Upload to GPU
+* GPU load: 174.7608184814453 us
+GPU computation
+* GPU compute: 5871.057510375977 us
+
+
+Step:  218
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66871.88148498535 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5876.5411376953125 us
+
+
+Step:  219
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65639.73426818848 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5817.413330078125 us
+
+
+Step:  220
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63555.47904968262 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5847.454071044922 us
+
+
+Step:  221
+load ../img/input2.jpg
+Preprocessing
+* Torch: 66489.45808410645 us
+Upload to GPU
+* GPU load: 173.5687255859375 us
+GPU computation
+* GPU compute: 5905.866622924805 us
+
+
+Step:  222
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72293.75839233398 us
+Upload to GPU
+* GPU load: 174.7608184814453 us
+GPU computation
+* GPU compute: 5886.077880859375 us
+
+
+Step:  223
+load ../img/input4.jpg
+Preprocessing
+* Torch: 57283.878326416016 us
+Upload to GPU
+* GPU load: 175.95291137695312 us
+GPU computation
+* GPU compute: 5897.998809814453 us
+
+
+Step:  224
+load ../img/input5.jpg
+Preprocessing
+* Torch: 66905.02166748047 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5879.16374206543 us
+
+
+Step:  225
+load ../img/input6.jpg
+Preprocessing
+* Torch: 61778.78379821777 us
+Upload to GPU
+* GPU load: 174.52239990234375 us
+GPU computation
+* GPU compute: 5867.719650268555 us
+
+
+Step:  226
+load ../img/input7.jpg
+Preprocessing
+* Torch: 56674.48043823242 us
+Upload to GPU
+* GPU load: 174.04556274414062 us
+GPU computation
+* GPU compute: 5852.699279785156 us
+
+
+Step:  227
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72324.75280761719 us
+Upload to GPU
+* GPU load: 174.04556274414062 us
+GPU computation
+* GPU compute: 5902.528762817383 us
+
+
+Step:  228
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56169.986724853516 us
+Upload to GPU
+* GPU load: 173.33030700683594 us
+GPU computation
+* GPU compute: 5855.321884155273 us
+
+
+Step:  229
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73871.37413024902 us
+Upload to GPU
+* GPU load: 174.04556274414062 us
+GPU computation
+* GPU compute: 5910.634994506836 us
+
+
+Step:  230
+load ../img/input11.jpg
+Preprocessing
+* Torch: 55796.38481140137 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5881.786346435547 us
+
+
+Step:  231
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56214.80941772461 us
+Upload to GPU
+* GPU load: 177.3834228515625 us
+GPU computation
+* GPU compute: 5911.588668823242 us
+
+
+Step:  232
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57313.20381164551 us
+Upload to GPU
+* GPU load: 172.3766326904297 us
+GPU computation
+* GPU compute: 5815.982818603516 us
+
+
+Step:  233
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68337.91732788086 us
+Upload to GPU
+* GPU load: 171.89979553222656 us
+GPU computation
+* GPU compute: 5826.711654663086 us
+
+
+Step:  234
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63356.876373291016 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5830.526351928711 us
+
+
+Step:  235
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60115.57579040527 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5849.361419677734 us
+
+
+Step:  236
+load ../img/input17.jpg
+Preprocessing
+* Torch: 75174.09324645996 us
+Upload to GPU
+* GPU load: 172.13821411132812 us
+GPU computation
+* GPU compute: 5876.779556274414 us
+
+
+Step:  237
+load ../img/input18.jpg
+Preprocessing
+* Torch: 68944.69261169434 us
+Upload to GPU
+* GPU load: 169.27719116210938 us
+GPU computation
+* GPU compute: 5863.666534423828 us
+
+
+Step:  238
+load ../img/input19.jpg
+Preprocessing
+* Torch: 69424.15237426758 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5841.01676940918 us
+
+
+Step:  239
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65489.29214477539 us
+Upload to GPU
+* GPU load: 165.70091247558594 us
+GPU computation
+* GPU compute: 5821.22802734375 us
+
+
+Step:  240
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63495.635986328125 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5868.196487426758 us
+
+
+Step:  241
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68793.77365112305 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5842.2088623046875 us
+
+
+Step:  242
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72181.46324157715 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5885.601043701172 us
+
+
+Step:  243
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59725.046157836914 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5884.1705322265625 us
+
+
+Step:  244
+load ../img/input5.jpg
+Preprocessing
+* Torch: 66878.3187866211 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5852.699279785156 us
+
+
+Step:  245
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64337.730407714844 us
+Upload to GPU
+* GPU load: 167.8466796875 us
+GPU computation
+* GPU compute: 5840.539932250977 us
+
+
+Step:  246
+load ../img/input7.jpg
+Preprocessing
+* Torch: 56784.868240356445 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5844.354629516602 us
+
+
+Step:  247
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72204.8282623291 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5894.42253112793 us
+
+
+Step:  248
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56066.036224365234 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5884.885787963867 us
+
+
+Step:  249
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73698.52066040039 us
+Upload to GPU
+* GPU load: 165.9393310546875 us
+GPU computation
+* GPU compute: 5858.898162841797 us
+
+
+Step:  250
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58425.6649017334 us
+Upload to GPU
+* GPU load: 168.5619354248047 us
+GPU computation
+* GPU compute: 5877.256393432617 us
+
+
+Step:  251
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56079.38766479492 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5872.488021850586 us
+
+
+Step:  252
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57326.07841491699 us
+Upload to GPU
+* GPU load: 158.07151794433594 us
+GPU computation
+* GPU compute: 5841.493606567383 us
+
+
+Step:  253
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68571.32911682129 us
+Upload to GPU
+* GPU load: 151.15737915039062 us
+GPU computation
+* GPU compute: 5813.121795654297 us
+
+
+Step:  254
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63351.63116455078 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5826.9500732421875 us
+
+
+Step:  255
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60072.66044616699 us
+Upload to GPU
+* GPU load: 170.70770263671875 us
+GPU computation
+* GPU compute: 5922.794342041016 us
+
+
+Step:  256
+load ../img/input17.jpg
+Preprocessing
+* Torch: 74932.81364440918 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5849.123001098633 us
+
+
+Step:  257
+load ../img/input18.jpg
+Preprocessing
+* Torch: 69035.53009033203 us
+Upload to GPU
+* GPU load: 167.1314239501953 us
+GPU computation
+* GPU compute: 5842.685699462891 us
+
+
+Step:  258
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66841.84074401855 us
+Upload to GPU
+* GPU load: 172.61505126953125 us
+GPU computation
+* GPU compute: 5875.587463378906 us
+
+
+Step:  259
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65458.53614807129 us
+Upload to GPU
+* GPU load: 166.6545867919922 us
+GPU computation
+* GPU compute: 5841.970443725586 us
+
+
+Step:  260
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63705.4443359375 us
+Upload to GPU
+* GPU load: 154.01840209960938 us
+GPU computation
+* GPU compute: 5893.468856811523 us
+
+
+Step:  261
+load ../img/input2.jpg
+Preprocessing
+* Torch: 68769.21653747559 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5859.375 us
+
+
+Step:  262
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72338.10424804688 us
+Upload to GPU
+* GPU load: 169.51560974121094 us
+GPU computation
+* GPU compute: 5895.137786865234 us
+
+
+Step:  263
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59745.31173706055 us
+Upload to GPU
+* GPU load: 166.6545867919922 us
+GPU computation
+* GPU compute: 5860.805511474609 us
+
+
+Step:  264
+load ../img/input5.jpg
+Preprocessing
+* Torch: 66982.26928710938 us
+Upload to GPU
+* GPU load: 167.36984252929688 us
+GPU computation
+* GPU compute: 5832.910537719727 us
+
+
+Step:  265
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64900.39825439453 us
+Upload to GPU
+* GPU load: 170.9461212158203 us
+GPU computation
+* GPU compute: 5886.077880859375 us
+
+
+Step:  266
+load ../img/input7.jpg
+Preprocessing
+* Torch: 57360.41069030762 us
+Upload to GPU
+* GPU load: 166.6545867919922 us
+GPU computation
+* GPU compute: 5850.791931152344 us
+
+
+Step:  267
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72195.52993774414 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5889.415740966797 us
+
+
+Step:  268
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56050.53901672363 us
+Upload to GPU
+* GPU load: 170.4692840576172 us
+GPU computation
+* GPU compute: 5906.343460083008 us
+
+
+Step:  269
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73702.81219482422 us
+Upload to GPU
+* GPU load: 173.80714416503906 us
+GPU computation
+* GPU compute: 5894.660949707031 us
+
+
+Step:  270
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58376.78909301758 us
+Upload to GPU
+* GPU load: 165.9393310546875 us
+GPU computation
+* GPU compute: 5858.898162841797 us
+
+
+Step:  271
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56141.37649536133 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5879.878997802734 us
+
+
+Step:  272
+load ../img/input13.jpg
+Preprocessing
+* Torch: 54749.0119934082 us
+Upload to GPU
+* GPU load: 172.8534698486328 us
+GPU computation
+* GPU compute: 5891.561508178711 us
+
+
+Step:  273
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68391.32308959961 us
+Upload to GPU
+* GPU load: 171.18453979492188 us
+GPU computation
+* GPU compute: 5862.236022949219 us
+
+
+Step:  274
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63355.445861816406 us
+Upload to GPU
+* GPU load: 171.42295837402344 us
+GPU computation
+* GPU compute: 5904.674530029297 us
+
+
+Step:  275
+load ../img/input16.jpg
+Preprocessing
+* Torch: 60116.05262756348 us
+Upload to GPU
+* GPU load: 168.80035400390625 us
+GPU computation
+* GPU compute: 5856.752395629883 us
+
+
+Step:  276
+load ../img/input17.jpg
+Preprocessing
+* Torch: 72755.57518005371 us
+Upload to GPU
+* GPU load: 168.32351684570312 us
+GPU computation
+* GPU compute: 5832.672119140625 us
+
+
+Step:  277
+load ../img/input18.jpg
+Preprocessing
+* Torch: 69196.46263122559 us
+Upload to GPU
+* GPU load: 169.0387725830078 us
+GPU computation
+* GPU compute: 5899.4293212890625 us
+
+
+Step:  278
+load ../img/input19.jpg
+Preprocessing
+* Torch: 69437.26539611816 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5820.035934448242 us
+
+
+Step:  279
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65609.69352722168 us
+Upload to GPU
+* GPU load: 168.08509826660156 us
+GPU computation
+* GPU compute: 5842.924118041992 us
+
+
+Step:  280
+load ../img/input1.jpg
+Preprocessing
+* Torch: 63551.902770996094 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5870.819091796875 us
+
+
+Step:  281
+load ../img/input2.jpg
+Preprocessing
+* Torch: 66184.04388427734 us
+Upload to GPU
+* GPU load: 169.99244689941406 us
+GPU computation
+* GPU compute: 5878.925323486328 us
+
+
+Step:  282
+load ../img/input3.jpg
+Preprocessing
+* Torch: 72121.14334106445 us
+Upload to GPU
+* GPU load: 169.7540283203125 us
+GPU computation
+* GPU compute: 5889.415740966797 us
+
+
+Step:  283
+load ../img/input4.jpg
+Preprocessing
+* Torch: 59760.57052612305 us
+Upload to GPU
+* GPU load: 166.89300537109375 us
+GPU computation
+* GPU compute: 5878.210067749023 us
+
+
+Step:  284
+load ../img/input5.jpg
+Preprocessing
+* Torch: 66850.42381286621 us
+Upload to GPU
+* GPU load: 169.27719116210938 us
+GPU computation
+* GPU compute: 5828.380584716797 us
+
+
+Step:  285
+load ../img/input6.jpg
+Preprocessing
+* Torch: 64421.17691040039 us
+Upload to GPU
+* GPU load: 154.25682067871094 us
+GPU computation
+* GPU compute: 5971.9085693359375 us
+
+
+Step:  286
+load ../img/input7.jpg
+Preprocessing
+* Torch: 56899.7859954834 us
+Upload to GPU
+* GPU load: 202.65579223632812 us
+GPU computation
+* GPU compute: 5821.704864501953 us
+
+
+Step:  287
+load ../img/input8.jpg
+Preprocessing
+* Torch: 72301.86462402344 us
+Upload to GPU
+* GPU load: 203.60946655273438 us
+GPU computation
+* GPU compute: 5904.197692871094 us
+
+
+Step:  288
+load ../img/input9.jpg
+Preprocessing
+* Torch: 56084.394454956055 us
+Upload to GPU
+* GPU load: 177.3834228515625 us
+GPU computation
+* GPU compute: 5856.990814208984 us
+
+
+Step:  289
+load ../img/input10.jpg
+Preprocessing
+* Torch: 73868.0362701416 us
+Upload to GPU
+* GPU load: 203.3710479736328 us
+GPU computation
+* GPU compute: 5862.951278686523 us
+
+
+Step:  290
+load ../img/input11.jpg
+Preprocessing
+* Torch: 58377.26593017578 us
+Upload to GPU
+* GPU load: 206.47048950195312 us
+GPU computation
+* GPU compute: 5916.357040405273 us
+
+
+Step:  291
+load ../img/input12.jpg
+Preprocessing
+* Torch: 56184.05342102051 us
+Upload to GPU
+* GPU load: 205.51681518554688 us
+GPU computation
+* GPU compute: 5930.900573730469 us
+
+
+Step:  292
+load ../img/input13.jpg
+Preprocessing
+* Torch: 57418.5848236084 us
+Upload to GPU
+* GPU load: 201.70211791992188 us
+GPU computation
+* GPU compute: 5807.161331176758 us
+
+
+Step:  293
+load ../img/input14.jpg
+Preprocessing
+* Torch: 68524.36065673828 us
+Upload to GPU
+* GPU load: 206.94732666015625 us
+GPU computation
+* GPU compute: 5902.767181396484 us
+
+
+Step:  294
+load ../img/input15.jpg
+Preprocessing
+* Torch: 63399.553298950195 us
+Upload to GPU
+* GPU load: 201.22528076171875 us
+GPU computation
+* GPU compute: 5791.902542114258 us
+
+
+Step:  295
+load ../img/input16.jpg
+Preprocessing
+* Torch: 59938.907623291016 us
+Upload to GPU
+* GPU load: 204.56314086914062 us
+GPU computation
+* GPU compute: 5864.620208740234 us
+
+
+Step:  296
+load ../img/input17.jpg
+Preprocessing
+* Torch: 75145.95985412598 us
+Upload to GPU
+* GPU load: 200.51002502441406 us
+GPU computation
+* GPU compute: 5821.22802734375 us
+
+
+Step:  297
+load ../img/input18.jpg
+Preprocessing
+* Torch: 69124.69863891602 us
+Upload to GPU
+* GPU load: 204.0863037109375 us
+GPU computation
+* GPU compute: 5880.3558349609375 us
+
+
+Step:  298
+load ../img/input19.jpg
+Preprocessing
+* Torch: 66647.52960205078 us
+Upload to GPU
+* GPU load: 204.0863037109375 us
+GPU computation
+* GPU compute: 5882.024765014648 us
+
+
+Step:  299
+load ../img/input20.jpg
+Preprocessing
+* Torch: 65493.58367919922 us
+Upload to GPU
+* GPU load: 200.2716064453125 us
+GPU computation
+* GPU compute: 5848.884582519531 us
+
+
