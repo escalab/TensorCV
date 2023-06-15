@@ -91,7 +91,7 @@ for step in range(100):
     input_torch = Image.open("img/input"+str(step%20+1)+".jpg")
     start_time = time.time()
     input_batch = preprocess(input_torch).unsqueeze(0)
-    print("* Torch: %s us" % ((time.time() - start_time) * 1000000))
+    print("* Torch: %s ns" % ((time.time() - start_time) * 1000000000))
     
     # for GPUs
     if MODE == "GPU":
@@ -100,18 +100,18 @@ for step in range(100):
         if torch.cuda.is_available():
             start_time = time.time()
             input_batch = input_batch.to('cuda')
-            print("* GPU load: %s us" % ((time.time() - start_time) * 1000000))
+            print("* GPU load: %s ns" % ((time.time() - start_time) * 1000000000))
             model.to('cuda')
 
         print("GPU computation")
         with torch.no_grad():
-            # with torch.autocast(device_type='cuda', dtype=torch.float16):
-            execution_time = 0
-            start_time = time.time()
-            output = model(input_batch)
-            probabilities = torch.nn.functional.softmax(output[0], dim=0)
-            torch.cuda.synchronize()
-            print("* GPU compute: %s us" % ((time.time() - start_time) * 1000000))
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
+                execution_time = 0
+                start_time = time.time()
+                output = model(input_batch)
+                probabilities = torch.nn.functional.softmax(output[0], dim=0)
+                torch.cuda.synchronize()
+                print("* GPU compute: %s ns" % ((time.time() - start_time) * 1000000000))
             
     # for CPUs
     if MODE == "CPU":
@@ -119,7 +119,7 @@ for step in range(100):
         execution_time = 0
         start_time = time.time()
         output = model(input_batch)
-        print("* CPU: %s us" % ((time.time() - start_time) * 1000000))
+        print("* CPU: %s ns" % ((time.time() - start_time) * 100000000))
         probabilities = torch.nn.functional.softmax(output[0], dim=0)
 
     print("\n")
