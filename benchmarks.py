@@ -2,6 +2,7 @@ import sys
 sys.path.append('/usr/local/lib/python3.8/site-packages')
 
 import torch
+import torch_tensorrt
 import time
 import cv2
 from PIL import Image
@@ -68,6 +69,11 @@ if MODEL == "WideRes":
 
 model.eval()
 
+trt_model = torch_tensorrt.compile(model, 
+    inputs= [torch_tensorrt.Input((1, 3, 224, 224))],
+    enabled_precisions= { torch_tensorrt.dtype.half} # Run with FP16
+)
+
 # preprocess = weights.transforms()
 
 preprocess = transforms.Compose([
@@ -84,11 +90,11 @@ print(preprocess)
 execution_time = 0
 for step in range(100):
     print("Step: ", step)
-    print("load img/input"+str(step%20+1)+".jpg")
+    print("load img/4032/input"+str(step%20+1)+".jpg")
 
     # Torch
     print("Preprocessing")
-    input_torch = Image.open("img/input"+str(step%20+1)+".jpg")
+    input_torch = Image.open("img/4032/input"+str(step%20+1)+".jpg")
     start_time = time.time()
     input_batch = preprocess(input_torch).unsqueeze(0)
     print("* Torch: %s ns" % ((time.time() - start_time) * 1000000000))
@@ -101,14 +107,14 @@ for step in range(100):
             start_time = time.time()
             input_batch = input_batch.to('cuda')
             print("* GPU load: %s ns" % ((time.time() - start_time) * 1000000000))
-            model.to('cuda')
+            trt_model.to('cuda')
 
         print("GPU computation")
         with torch.no_grad():
             with torch.autocast(device_type='cuda', dtype=torch.float16):
                 execution_time = 0
                 start_time = time.time()
-                output = model(input_batch)
+                output = trt_model(input_batch)
                 probabilities = torch.nn.functional.softmax(output[0], dim=0)
                 torch.cuda.synchronize()
                 print("* GPU compute: %s ns" % ((time.time() - start_time) * 1000000000))
@@ -118,7 +124,7 @@ for step in range(100):
         print("CPU computation")
         execution_time = 0
         start_time = time.time()
-        output = model(input_batch)
+        output = trt_model(input_batch)
         print("* CPU: %s ns" % ((time.time() - start_time) * 100000000))
         probabilities = torch.nn.functional.softmax(output[0], dim=0)
 

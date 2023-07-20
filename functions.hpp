@@ -11,7 +11,16 @@
 using namespace cv;
 namespace tensorcv {
 
-void test();
+enum COLORCODE {
+    RGB2BGR,
+    BGR2RGB,
+    RGB2YUV,
+    YUV2RGB,
+    BGR2YUV,
+    YUV2BGR
+};
+
+void GEMMtest();
 
 typedef struct splitted_src_ {
     half* R = NULL;
@@ -25,7 +34,6 @@ Mat download ( half* output_d, int rows, int cols, int transpose=0 );
 void upload_split ( splitted_src*, Mat* src, int rows, int cols );
 void upload_split ( splitted_src*, int rows, int cols );
 Mat download_merge ( half* output1_d, half* output2_d, half* output3_d, int rows, int cols, int transpose=0 );
-void synch();
 
 void free (half*, half*);
 void free (splitted_src, splitted_src);

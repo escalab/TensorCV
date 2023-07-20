@@ -26,15 +26,11 @@ void tensorcv::free (tensorcv::splitted_src input, tensorcv::splitted_src output
     cudaFree(output.B);
 }
 
-void tensorcv::synch() {
-    cudaDeviceSynchronize();
-}
-
 // ****************************************************************************************************
 // Type conversion
 // ****************************************************************************************************
 
-__global__ void uchar2half(half* dst, unsigned char* src, int rows, int cols, int transpose, int alpha=256){
+__global__ void uchar2half(half* dst, unsigned char* src, int rows, int cols, int transpose, int alpha=255){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
     if (tx >= cols || ty >= rows) return;
@@ -44,7 +40,7 @@ __global__ void uchar2half(half* dst, unsigned char* src, int rows, int cols, in
         dst[ty*cols + tx] = (half) ((float)src[ty*cols + tx] / alpha);
 }
 
-__global__ void half2uchar(unsigned char* dst, half* src, int rows, int cols, int transpose, int alpha=256){
+__global__ void half2uchar(unsigned char* dst, half* src, int rows, int cols, int transpose, int alpha=255){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
     if (tx >= cols || ty >= rows) return;
@@ -54,7 +50,7 @@ __global__ void half2uchar(unsigned char* dst, half* src, int rows, int cols, in
         dst[ty*cols + tx] = (unsigned char)((float)src[ty*cols + tx] * alpha);
 }
 
-__global__ void uchar2half_split(half* dst1, half* dst2, half* dst3, unsigned char* src, int rows, int cols, int transpose, int alpha=256){
+__global__ void uchar2half_split(half* dst1, half* dst2, half* dst3, unsigned char* src, int rows, int cols, int transpose, int alpha=255){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
     if (tx >= cols || ty >= rows) return;
@@ -69,7 +65,7 @@ __global__ void uchar2half_split(half* dst1, half* dst2, half* dst3, unsigned ch
     }
 }
 
-__global__ void half2uchar_merge(unsigned char* dst, half* src1, half* src2, half* src3, int rows, int cols, int transpose, int alpha=256){
+__global__ void half2uchar_merge(unsigned char* dst, half* src1, half* src2, half* src3, int rows, int cols, int transpose, int alpha=255){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
     if (tx >= cols || ty >= rows) return;
@@ -144,7 +140,7 @@ void tensorcv::upload_split ( tensorcv::splitted_src* dst, Mat* src, int rows, i
     
     dim3 block(16, 16);
     dim3 grid((3*cols + block.x - 1) / block.x, (rows + block.y - 1) / block.y);
-    uchar2half_split<<<grid, block>>>((dst->R), (dst->G), (dst->B), src_d, rows, 3*cols, 0);
+    uchar2half_split<<<grid, block>>>((dst->R), (dst->G), (dst->B), src_d, rows, cols, 0);
 
     cudaDeviceSynchronize();
     cudaErrCheck( cudaFree(src_d) );
@@ -371,11 +367,13 @@ void tensorcv::imgprocKernel::init_rotate(int iRow_, int iCol_, int repeat_){
     repeat = repeat_;
 
     if (repeat % 4 == 1) {
+        // 90-degree rotation
         kernel1 = new half[iCol*iCol]();
         for (int i=0; i<iCol; i++)
             kernel1[i*iCol + (iCol-1-i)] = 1;
 
     } else if (repeat % 4 == 2) {
+        // 180-degree rotation
         kernel1 = new half[iCol*iCol]();
         kernel2 = new half[iRow*iRow]();
         for (int i=0; i<iCol; i++)
@@ -384,11 +382,13 @@ void tensorcv::imgprocKernel::init_rotate(int iRow_, int iCol_, int repeat_){
             kernel2[i*iRow + (iRow-1-i)] = 1;
         
     } else if (repeat % 4 == 3) {
+        // 270-degree rotation
         kernel2 = new half[iRow*iRow]();
         for (int i=0; i<iRow; i++)
             kernel2[i*iRow + (iRow-1-i)] = 1;
 
     } else {
+        // 360-degree rotation
         std::cout << "WORTH NOTHING: 360-degree rotation \n";
         return;
     }
@@ -513,119 +513,110 @@ void tensorcv::imgprocKernel::init_normalize(int iRow_, int iCol_, int channelCo
 
     kernel1 = new half[16*iRow]();
     kernel2 = new half[iCol*16]();
-    kernel3 = new half[iRow*iRow]();
 
-    for (int i=0; i<iRow; i++) {
-        kernel1[i] = 1;
-        kernel3[i*iRow+i] = 1;
-    }
-    for (int j=0; j<iCol; j++) {
-        kernel2[j*16] = 1;
-    }
+    for (int i=0; i<iRow; i++) 
+        kernel1[i] = (float)1/iRow;
+    for (int j=0; j<iCol; j++) 
+        kernel2[j*16] = (float)1/iCol;
 }
 
 void tensorcv::imgprocKernel::upload_normalize(){
     cudaErrCheck( cudaMalloc((void **)&d_kernel1, 16*iRow * sizeof(half)) );
     cudaErrCheck( cudaMalloc((void **)&d_kernel2, iCol*16 * sizeof(half)) );
-    cudaErrCheck( cudaMalloc((void **)&d_kernel3, iRow*iRow * sizeof(half)) );
     cudaErrCheck( cudaMemcpy(d_kernel1, kernel1, 16*iRow * sizeof(half), cudaMemcpyHostToDevice) );
     cudaErrCheck( cudaMemcpy(d_kernel2, kernel2, iCol*16 * sizeof(half), cudaMemcpyHostToDevice) );
-    cudaErrCheck( cudaMemcpy(d_kernel3, kernel3, iRow*iRow * sizeof(half), cudaMemcpyHostToDevice) );
 
     cudaErrCheck( cudaMalloc((void **)&d_temp1, 16 * 16 * sizeof(half)) );
     cudaErrCheck( cudaMalloc((void **)&d_temp2, (iRow+1) * 16 * sizeof(half)) );
     cudaErrCheck( cudaMalloc((void **)&d_temp3, (iRow+1) * iCol * sizeof(half)) );
 }
 
-__global__ void comptue_norm( half* sum, half* squaredSum, half* input, int oRow, int oCol) {
+__global__ void comptue_norm( half* dst, half* sum, half* squaredSum, half* input, int oRow, int oCol) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < oRow * oCol) {
         half mean = sum[0];
         half stddev = sqrt((float)squaredSum[0] - (float)mean * (float)mean);
-        input[idx] = ((float)input[idx] - (float)mean) / (float)stddev;
+        dst[idx] = ((float)input[idx] - (float)mean) / (float)stddev;
     }
 }
 
 void tensorcv::imgprocKernel::apply_normalize(cublasHandle_t handle, half* src1, half* src2, half* src3, half* dst1, half* dst2, half* dst3){
     const half alpha = 1.0;
     const half beta = 0.0;
-    const half overrow = (float)1/iRow;
-    const half overcol = (float)1/iCol;
+    const half gamma = 1.0/iCol;
 
     // R
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, 16, iCol, iRow,
-                                    &overrow, d_kernel1, CUDA_R_16F, iRow, src1, CUDA_R_16F, iCol, 
+                                    &alpha, d_kernel1, CUDA_R_16F, iRow, src1, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, 16, 16, iCol,
-                                    &overcol, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
+                                    &alpha, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
                                     &beta, d_temp1, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_N, iRow, iRow, iCol,
-                                    &overcol, src1, CUDA_R_16F, iCol, src1, CUDA_R_16F, iCol, 
+                                    &alpha, src1, CUDA_R_16F, iCol, src1, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, iRow,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_N, iRow+1, 16, iRow,
-                                    &overrow, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
+                                    &gamma, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
                                     &beta, d_temp2, CUDA_R_16F, iRow+1,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 
-    comptue_norm<<<iRow*iCol +31, 32>>>(d_temp1, d_temp2, src1, iRow, iCol);
+    comptue_norm<<<(iRow*iCol +31)/32, 32>>>(dst1, d_temp1, d_temp2, src1, iRow, iCol);
 
     // G
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, 16, iCol, iRow,
-                                    &overrow, d_kernel1, CUDA_R_16F, iRow, src2, CUDA_R_16F, iCol, 
+                                    &alpha, d_kernel1, CUDA_R_16F, iRow, src2, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, 16, 16, iCol,
-                                    &overcol, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
+                                    &alpha, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
                                     &beta, d_temp1, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_N, iRow, iRow, iCol,
-                                    &overcol, src2, CUDA_R_16F, iCol, src2, CUDA_R_16F, iCol, 
+                                    &alpha, src2, CUDA_R_16F, iCol, src2, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, iRow,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_N, iRow+1, 16, iRow,
-                                    &overrow, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
+                                    &gamma, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
                                     &beta, d_temp2, CUDA_R_16F, iRow+1,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     
-    comptue_norm<<<iRow*iCol +31, 32>>>(d_temp1, d_temp2, src2, iRow, iCol);
+    comptue_norm<<<(iRow*iCol +31)/32, 32>>>(dst2, d_temp1, d_temp2, src2, iRow, iCol);
 
     // B
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, 16, iCol, iRow,
-                                    &overrow, d_kernel1, CUDA_R_16F, iRow, src3, CUDA_R_16F, iCol, 
+                                    &alpha, d_kernel1, CUDA_R_16F, iRow, src3, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, 16, 16, iCol,
-                                    &overcol, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
+                                    &alpha, d_temp3, CUDA_R_16F, 16, d_kernel2, CUDA_R_16F, 16, 
                                     &beta, d_temp1, CUDA_R_16F, 16,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_N, iRow, iRow, iCol,
-                                    &overcol, src3, CUDA_R_16F, iCol, src3, CUDA_R_16F, iCol, 
+                                    &alpha, src3, CUDA_R_16F, iCol, src3, CUDA_R_16F, iCol, 
                                     &beta, d_temp3, CUDA_R_16F, iRow,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_N, iRow+1, 16, iRow,
-                                    &overrow, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
+                                    &gamma, d_temp3, CUDA_R_16F, iRow+1, d_kernel1, CUDA_R_16F, iRow, 
                                     &beta, d_temp2, CUDA_R_16F, iRow+1,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 
-    comptue_norm<<<iRow*iCol +31, 32>>>(d_temp1, d_temp2, src3, iRow, iCol);
+    comptue_norm<<<(iRow*iCol +31)/32,32>>>(dst3, d_temp1, d_temp2, src3, iRow, iCol);
 }
 
 void tensorcv::imgprocKernel::release_normalize(){
     cudaErrCheck( cudaFree(d_kernel1) );
     cudaErrCheck( cudaFree(d_kernel2) );
-    cudaErrCheck( cudaFree(d_kernel3) );
     cudaErrCheck( cudaFree(d_temp1) );
     cudaErrCheck( cudaFree(d_temp2) );
     cudaErrCheck( cudaFree(d_temp3) );
     delete[] kernel1;
     delete[] kernel2;
-    delete[] kernel3;
 }
 
 // ****************************************************************************************************
@@ -831,7 +822,7 @@ void tensorcv::imgprocKernel::release_integrated(){
 // GEMM Test
 // ****************************************************************************************************
 
-// void tensorcv::test() {
+// void tensorcv::GEMMtest() {
 //     cublasHandle_t handle;
 //     cublasCreate(&handle);
 

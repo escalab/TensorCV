@@ -9,14 +9,3 @@
 
 #include <math.h>
 #include <chrono>
-
-namespace tensorcv {
-enum COLORCODE {
-    RGB2BGR,
-    BGR2RGB,
-    RGB2YUV,
-    YUV2RGB,
-    BGR2YUV,
-    YUV2BGR
-};
-}

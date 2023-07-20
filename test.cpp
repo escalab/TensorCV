@@ -1,10 +1,11 @@
-#include "cvTest.hpp"
+#include "test.hpp"
 
 int main(int argc, char** argv )
 {
+    // check arguments
     if ( argc != 3 ) {
-        printf("usage: ./cvTest [CPU/GPU/CV/ALL] [inputSize]\n");
-        printf("size: 320 / 1600 / 2048 / 2592 / 3264 / 4032\n");
+        printf("usage: ./tensorCV [CPU/GPU/CV/ALL] [inputSize]\n");
+        printf("size: 480 / 1600 / 2048 / 2592 / 3264 / 4032\n");
         return -1;
     }
 
@@ -12,27 +13,32 @@ int main(int argc, char** argv )
     std::cout << "We have " << cuda::getCudaEnabledDeviceCount() << " GPUs" << "\n";
 
     int long long execution_time = 0;
-    int numImg = 100;
+    int numImg = 20;
 
-    // mode 0 : CPU only 
-    // mode 1 : GPU only
-    // mode 2 : TensorCV only
+    // check mode
+    // mode 0 : CPU 
+    // mode 1 : GPU
+    // mode 2 : TensorCV
     // mode 3 : all
-
+    // mode 4 : test
     int mode;
+
     if(strcmp(argv[1],"CPU") == 0) mode = 0;
     else if(strcmp(argv[1],"GPU") == 0) mode = 1;
     else if(strcmp(argv[1],"CV") == 0) mode = 2;
     else if(strcmp(argv[1],"ALL") == 0) mode = 3;
+    else if(strcmp(argv[1],"TEST") == 0) mode = 4;
     else {
-        printf("usage: ./cvTest [CPU/GPU/CV/ALL]\n");
+        printf("usage: ./tensorCV [CPU/GPU/CV/ALL]\n");
+        printf("size: 480 / 1600 / 2048 / 2592 / 3264 / 4032\n");
         return -1;
     }
 
+    // check input size
     int inputSize = atoi(argv[2]);
     if (inputSize != 480 && inputSize != 1600 && inputSize != 2048 
         && inputSize != 2592 && inputSize != 3264 && inputSize !=4032) {
-        printf("usage: ./cvTest [CPU/GPU/CV/ALL] [inputSize]\n");
+        printf("usage: ./tensorCV [CPU/GPU/CV/ALL] [inputSize]\n");
         printf("size: 480 / 1600 / 2048 / 2592 / 3264 / 4032\n");
         return -1;
     }
@@ -40,8 +46,9 @@ int main(int argc, char** argv )
 // ***************************************************************************************************
 
     std::cout << "OpenCV img preprocessing with CPU" << std::endl;
-    std::cout << "Iter load resiz center cvt rotate norm" << std::endl;
+    std::cout << "Iter resiz center cvt rotate norm" << std::endl;
 
+    // declare variables
     Mat outputImg, smallImg, outputImg_rgb[3];
 
     if (mode == 0 || mode == 3) {
@@ -49,15 +56,13 @@ int main(int argc, char** argv )
             std::cout << step << " ";
 
             // load image from ../img/inputSize/
-            auto blockStart = high_resolution_clock::now();
-            char filepath[32];
-            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step%20+1);
+            char filepath[32] = {};
+            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
-            std::cout << duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count() << " ";
-
+        
             // resize
-            blockStart = high_resolution_clock::now();
+            auto blockStart = high_resolution_clock::now();
             Size resizeSize(256,256);
             resize(inputImg, smallImg, resizeSize, 0, 0, INTER_LINEAR);
             std::cout << duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count() << " ";
@@ -90,9 +95,6 @@ int main(int argc, char** argv )
 
             inputImg.release();
 
-            // sprintf(filepath, "../img/320/input%d.jpg", step%20+1);
-            // imwrite(filepath, smallImg);
-
             // imwrite("output.jpg", outputImg);
         }
     }
@@ -100,7 +102,7 @@ int main(int argc, char** argv )
 // ***************************************************************************************************
 
     std::cout << "OpenCV img preprocessing with GPU" << std::endl;
-    std::cout << "Iter load resiz center cvt rotate norm" << std::endl;
+    std::cout << "Iter resiz center cvt rotate norm" << std::endl;
 
     cuda::GpuMat inputImg_gpu, outputImg_gpu, outputImg_gpu_rgb[3];
 
@@ -109,16 +111,14 @@ int main(int argc, char** argv )
             std::cout << step << " ";
 
             // load image from ../img/
-            auto blockStart = high_resolution_clock::now();
             char filepath[32];
-            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step%20+1);
+            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
             inputImg_gpu.upload(inputImg);
-            std::cout << duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count() << " ";
 
             // resize
-            blockStart = high_resolution_clock::now();
+            auto blockStart = high_resolution_clock::now();
             Size resizeSize(256,256);
             cuda::resize(inputImg_gpu, outputImg_gpu, resizeSize, 0, 0, INTER_LINEAR);
             std::cout << duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count() << " ";
@@ -152,8 +152,9 @@ int main(int argc, char** argv )
 
             outputImg_gpu.download(outputImg);
             inputImg.release();
+
+            // imwrite("output.jpg", outputImg);
         }
-        // imwrite("output.jpg", outputImg);
     }
 
     smallImg.release();
@@ -170,11 +171,12 @@ int main(int argc, char** argv )
     cublasHandle_t handle;
     cublasCreate(&handle);
 
-    std::cout << "tensorcv img preprocessing with TensorCV" << std::endl;
-    std::cout << "Iter load resiz center cvt rotate norm integ" << std::endl;
+    std::cout << "Img preprocessing with TensorCV" << std::endl;
+    std::cout << "Iter resiz center cvt rotate norm integ" << std::endl;
     long int execTime[numImg][7] = {0};
 
     if (mode == 2 || mode == 3) {
+        // generate resize kernels
         switch (inputSize)
         {
             case 4032:
@@ -203,79 +205,79 @@ int main(int argc, char** argv )
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
-            auto blockStart = high_resolution_clock::now();
             char filepath[32];
-            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step%20+1);
+            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
+            // upload and cudaMalloc
             half* d_inputImgArr = tensorcv::upload(&inputImg, inputImg.rows, inputImg.cols);
             half* d_outputImgArr = tensorcv::upload(256, 256);
-            execTime[step][0] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();        
 
-            tensorcv::synch();
-            blockStart = high_resolution_clock::now();
+            // apply resize kernel
+            auto blockStart = high_resolution_clock::now();
             kernel.apply_resize(handle, d_inputImgArr, d_outputImgArr);
             execTime[step][1] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
+            // download and free
             outputImg = tensorcv::download(d_outputImgArr, 256, 256);
-            sprintf(filepath, "../img/output%d_resized.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_resized.jpg", step+1);
             imwrite(filepath, outputImg);
-
             tensorcv::free(d_inputImgArr, d_outputImgArr);
             inputImg.release();
         }
         kernel.release_resize();
 
+        // generate crop kernels
         kernel.init_crop(256, 256, 224, 224);
         kernel.upload_crop();
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
             char filepath[32];
-            sprintf(filepath, "../img/output%d_resized.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_resized.jpg", step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
+            // upload and cudaMalloc
             half* d_inputImgArr = tensorcv::upload(&inputImg, inputImg.rows, inputImg.cols);
             half* d_outputImgArr = tensorcv::upload(224, 224);
 
-            tensorcv::synch();
+            // apply resize kernel
             auto blockStart = high_resolution_clock::now();
             kernel.apply_crop(handle, d_inputImgArr, d_outputImgArr);
             execTime[step][2] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
+            // download and free
             outputImg = tensorcv::download(d_outputImgArr, 224, 224);
-            sprintf(filepath, "../img/output%d_croped.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_croped.jpg", step+1);
             imwrite(filepath, outputImg);
-
             tensorcv::free(d_inputImgArr, d_outputImgArr);
             inputImg.release();
         }
         kernel.release_crop();
 
+        // generate cvtcolor kernels
         kernel.init_cvtcolor(224, 224, tensorcv::COLORCODE::RGB2YUV);
         kernel.upload_cvtcolor();
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
             char filepath[32];
-            sprintf(filepath, "../img/output%d_croped.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_croped.jpg", step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
+            // upload and cudaMalloc
             half* d_inputImgArr = tensorcv::upload(&inputImg, inputImg.rows, inputImg.cols);
             half* d_outputImgArr = tensorcv::upload(224, 224);
 
-            tensorcv::synch();
+            // apply resize kernel
             auto blockStart = high_resolution_clock::now();
             kernel.apply_cvtcolor(handle, d_inputImgArr, d_outputImgArr);
             execTime[step][3] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
+            // download and free
             outputImg = tensorcv::download(d_outputImgArr, 224, 224, 1);
-            sprintf(filepath, "../img/output%d_cvtcolor.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_cvtcolor.jpg", step+1);
             imwrite(filepath, outputImg);
-
             tensorcv::free(d_inputImgArr, d_outputImgArr);
             inputImg.release();
         }
@@ -284,57 +286,59 @@ int main(int argc, char** argv )
         tensorcv::splitted_src d_inputImgArr;
         tensorcv::splitted_src d_outputImgArr;
 
+        // generate rotate kernels
         kernel.init_rotate(224, 224, 1);
         kernel.upload_rotate();
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
             char filepath[32];
-            sprintf(filepath, "../img/output%d_croped.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_croped.jpg", step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
+            // upload and cudaMalloc
             tensorcv::upload_split(&d_inputImgArr, &inputImg, inputImg.rows, inputImg.cols);
             tensorcv::upload_split(&d_outputImgArr, 224, 224);
 
-            tensorcv::synch();
+            // apply resize kernel
             auto blockStart = high_resolution_clock::now();
             kernel.apply_rotate(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
                 d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
             execTime[step][4] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
+            // download and free
             outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 224, 224);
-            sprintf(filepath, "../img/output%d_rotate.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_rotate.jpg", step+1);
             imwrite(filepath, outputImg);
-
             tensorcv::free(d_inputImgArr, d_outputImgArr);
             inputImg.release();
         }
         kernel.release_rotate();
         
+        // generate normalize kernels
         kernel.init_normalize(224, 224, 1);
         kernel.upload_normalize();
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
             char filepath[32];
-            sprintf(filepath, "../img/output%d_croped.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_croped.jpg", step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
+            // upload and cudaMalloc
             tensorcv::upload_split(&d_inputImgArr, &inputImg, inputImg.rows, inputImg.cols);
             tensorcv::upload_split(&d_outputImgArr, 224, 224);
 
-            tensorcv::synch();
+            // apply resize kernel
             auto blockStart = high_resolution_clock::now();
             kernel.apply_normalize(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
                 d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
             execTime[step][5] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
+            // download and free
             outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 224, 224);
-            sprintf(filepath, "../img/output%d_normalize.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_normalize.jpg", step+1);
             imwrite(filepath, outputImg);
-
             tensorcv::free(d_inputImgArr, d_outputImgArr);
             inputImg.release();
         }
@@ -342,6 +346,7 @@ int main(int argc, char** argv )
 
         tensorcv::imgprocKernel kernel_norm;
 
+        // generate integrated kernels
         switch (inputSize)
         {
             case 4032:
@@ -371,21 +376,19 @@ int main(int argc, char** argv )
 
             // load image from ../img/
             char filepath[32];
-            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step%20+1);
+            sprintf(filepath, "../img/%d/input%d.jpg", inputSize, step+1);
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
             half* d_inputImgArr = tensorcv::upload(&inputImg, inputImg.rows, inputImg.cols);
             half* d_outputImgArr = tensorcv::upload(224, 224);
 
-            tensorcv::synch();
             auto blockStart = high_resolution_clock::now();
             kernel.apply_integrated(handle, d_inputImgArr, d_outputImgArr);
             // TODO: rearrange the order of channels
             execTime[step][6] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
-            tensorcv::synch();
 
             outputImg = tensorcv::download(d_outputImgArr, 224, 224, 1);
-            sprintf(filepath, "../img/output%d_integrated.jpg", step%20+1);
+            sprintf(filepath, "../img/output%d_integrated.jpg", step+1);
             imwrite(filepath, outputImg);
 
             tensorcv::free(d_inputImgArr, d_outputImgArr);
@@ -397,7 +400,7 @@ int main(int argc, char** argv )
 
         for (int step=0; step<numImg; step++) {
             std::cout << step << " ";
-            for (int i=0; i<6; i++) {
+            for (int i=1; i<6; i++) {
                 std::cout << execTime[step][i] << " ";
             }
             std::cout << execTime[step][6] << "\n";
@@ -408,63 +411,78 @@ int main(int argc, char** argv )
 // Test functions
 // ***************************************************************************************************
 
-    // tensorcv::test();
+    if (mode == 4) {
+        // tensorcv::GEMMtest();
 
-    // // make input data
-    // int iRow = 16, iCol = 32;
+        // make input data
+        int iRow = 4, iCol = 4;
 
-    // uchar* test = new uchar[iRow * iCol * 3];
-    // for (int i = 0; i < iRow*iCol*3; i++)
-    //     test[i] = rand() % 256;
-    // Mat testImg(iRow, iCol, CV_MAKETYPE(CV_8U, 3), test);
-    
-    // for (int i = 0; i<iRow; i++) {
-    //     for (int j=0; j<iCol*3; j++) {
-    //         std::cout << (int)test[i*iCol*3+j] << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-    // std::cout << std::endl;
+        uchar* test = new uchar[iRow * iCol * 3];
+        for (int i = 0; i < iRow*iCol*3; i++)
+            test[i] = rand() % 255;
+        Mat testImg(iRow, iCol, CV_MAKETYPE(CV_8U, 3), test);
+        
+        for (int i = 0; i<iRow; i++) {
+            for (int j=0; j<iCol*3; j++) {
+                std::cout << (int)test[i*iCol*3+j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
 
-    // // upload and cudaMalloc
-    // uchar* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
-    // uchar* d_outputImgArr = tensorcv::upload(16, 32);
-    
-    // tensorcv::imgprocKernel kernel;
+        // upload and cudaMalloc
+        // uchar* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
+        // uchar* d_outputImgArr = tensorcv::upload(16, 32);
+        
+        // tensorcv::imgprocKernel kernel;
 
-    // // kernel.init_resize(iRow, iCol, 16, 16);
-    // // kernel.upload_resize();
-    // // kernel.apply_resize(d_inputImgArr, d_outputImgArr);
+        // kernel.init_resize(iRow, iCol, 16, 16);
+        // kernel.upload_resize();
+        // kernel.apply_resize(d_inputImgArr, d_outputImgArr);
 
-    // // kernel.init_crop(iRow, iCol, 16, 16);
-    // // kernel.upload_crop();
-    // // kernel.apply_crop(d_inputImgArr, d_outputImgArr);
+        // kernel.init_crop(iRow, iCol, 16, 16);
+        // kernel.upload_crop();
+        // kernel.apply_crop(d_inputImgArr, d_outputImgArr);
 
-    // // kernel.init_cvtcolor(iRow, iCol, tensorcv::RGB2BGR);
-    // // kernel.upload_cvtcolor();
-    // // kernel.apply_cvtcolor(d_inputImgArr, d_outputImgArr);
+        // kernel.init_cvtcolor(iRow, iCol, tensorcv::RGB2BGR);
+        // kernel.upload_cvtcolor();
+        // kernel.apply_cvtcolor(d_inputImgArr, d_outputImgArr);
 
-    // // kernel.init_rotate(iRow, iCol, 2);
-    // // kernel.upload_rotate();
-    // // kernel.apply_rotate(d_inputImgArr, d_outputImgArr);
+        // kernel.init_rotate(iRow, iCol, 2);
+        // kernel.upload_rotate();
+        // kernel.apply_rotate(d_inputImgArr, d_outputImgArr);
 
-    // kernel.init_normalize(iRow, iCol, 1);
-    // kernel.upload_normalize();
-    // kernel.apply_normalize(d_inputImgArr, d_outputImgArr);
+        // kernel.init_normalize(iRow, iCol, 1);
+        // kernel.upload_normalize();
+        // kernel.apply_normalize(d_inputImgArr, d_outputImgArr);
 
-    // // kernel.init_integrated();
-    // // kernel.upload_integrated();
-    // // kernel.apply_integrated(d_inputImgArr, d_outputImgArr);
+        // kernel.init_integrated();
+        // kernel.upload_integrated();
+        // kernel.apply_integrated(d_inputImgArr, d_outputImgArr);
 
-    // // download
-    // Mat outputImg = tensorcv::download(d_outputImgArr, 16, 32);
+// ***************************************************************************************************
+        // Normalize test
 
-    // for (int i = 0; i<outputImg.rows; i++) {
-    //     for (int j=0; j<3*outputImg.cols; j++) {
-    //         std::cout << (int)(outputImg.data[i*3*outputImg.cols+j]) << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+        kernel.init_normalize(4, 4, 1);
+        kernel.upload_normalize();
 
+        tensorcv::splitted_src d_inputImgArr;
+        tensorcv::splitted_src d_outputImgArr;
+
+        // load image from ../img/
+        tensorcv::upload_split(&d_inputImgArr, &testImg, testImg.rows, testImg.cols);
+        tensorcv::upload_split(&d_outputImgArr, 4, 4);
+
+        kernel.apply_normalize(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
+            d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
+
+        outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 4, 4);
+        for (int i = 0; i<outputImg.rows; i++) {
+            for (int j=0; j<3*outputImg.cols; j++) {
+                std::cout << (int)(outputImg.data[i*3*outputImg.cols+j]) << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
     return 0;
 }
