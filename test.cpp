@@ -344,8 +344,6 @@ int main(int argc, char** argv )
         }
         kernel.release_normalize();
 
-        tensorcv::imgprocKernel kernel_norm;
-
         // generate integrated kernels
         switch (inputSize)
         {
@@ -466,17 +464,16 @@ int main(int argc, char** argv )
         kernel.init_normalize(4, 4, 1);
         kernel.upload_normalize();
 
-        tensorcv::splitted_src d_inputImgArr;
-        tensorcv::splitted_src d_outputImgArr;
+        kernel.init_integrated(4, 4, 3, 3, 2, 2, 1, 1);
+        kernel.upload_integrated();
 
-        // load image from ../img/
-        tensorcv::upload_split(&d_inputImgArr, &testImg, testImg.rows, testImg.cols);
-        tensorcv::upload_split(&d_outputImgArr, 4, 4);
+        half* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
+        half* d_outputImgArr = tensorcv::upload(2, 2);
 
-        kernel.apply_normalize(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
-            d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
+        kernel.apply_integrated(handle, d_inputImgArr, d_outputImgArr);
+        // TODO: rearrange the order of channels
 
-        outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 4, 4);
+        outputImg = tensorcv::download(d_outputImgArr, 2, 2, 1);
         for (int i = 0; i<outputImg.rows; i++) {
             for (int j=0; j<3*outputImg.cols; j++) {
                 std::cout << (int)(outputImg.data[i*3*outputImg.cols+j]) << " ";

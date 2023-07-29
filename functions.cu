@@ -641,19 +641,6 @@ __global__ void matmul(half* src1, half* src2, half* dst, int M, int N, int K, i
     }
 }
 
-// CPU matmul function
-void matmul_cpu(half* src1, half* src2, half* dst, int aRow, int bCol, int aCol){
-    for(int i=0; i<aRow; i++){
-        for(int j=0; j<bCol; j++){
-            half sum = __float2half(0.0);
-            for(int k=0; k<aCol; k++){
-                sum = (float)sum + (float)src1[i*aCol+k] * (float)src2[k*bCol+j];
-            }
-            dst[i*bCol+j] = sum;
-        }
-    }
-}
-
 void tensorcv::imgprocKernel::init_integrated(int iRow_, int iCol_, int rRow, int rCol, int cRow, int cCol, int colorCode, int repeat_){
     
     iRow = iRow_;
