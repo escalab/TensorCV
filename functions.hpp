@@ -65,11 +65,10 @@ class imgprocKernel {
 
         void init_normalize(int iRow_, int iCol_, int channelCode);
         void upload_normalize();
-        // void comptue_norm(half* sum, half* ssum, half* src);
         void apply_normalize(cublasHandle_t handle, half*, half*, half*, half*, half*, half*);
         void release_normalize();
 
-        void init_integrated(int iRow, int iCol, int rRow, int rCol, int cRow, int cCol, int colorCode, int rotate);
+        void init_integrated(tensorcv::imgprocKernel, tensorcv::imgprocKernel, tensorcv::imgprocKernel, tensorcv::imgprocKernel);
         void upload_integrated();
         void apply_integrated(cublasHandle_t handle, half* src, half* dst);
         void release_integrated();
@@ -82,6 +81,7 @@ class imgprocKernel {
         unsigned cropRow=0, cropCol=0;
 
         int repeat=0;
+        int colorCode=0;
         int channelCode=0;
         
         half* kernel1 = NULL;

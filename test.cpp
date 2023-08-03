@@ -283,8 +283,8 @@ int main(int argc, char** argv )
         }
         kernel.release_cvtcolor();
 
-        tensorcv::splitted_src d_inputImgArr;
-        tensorcv::splitted_src d_outputImgArr;
+        tensorcv::splitted_src d_inputImgArr_;
+        tensorcv::splitted_src d_outputImgArr_;
 
         // generate rotate kernels
         kernel.init_rotate(224, 224, 1);
@@ -297,20 +297,20 @@ int main(int argc, char** argv )
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
             // upload and cudaMalloc
-            tensorcv::upload_split(&d_inputImgArr, &inputImg, inputImg.rows, inputImg.cols);
-            tensorcv::upload_split(&d_outputImgArr, 224, 224);
+            tensorcv::upload_split(&d_inputImgArr_, &inputImg, inputImg.rows, inputImg.cols);
+            tensorcv::upload_split(&d_outputImgArr_, 224, 224);
 
             // apply resize kernel
             auto blockStart = high_resolution_clock::now();
-            kernel.apply_rotate(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
-                d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
+            kernel.apply_rotate(handle, d_inputImgArr_.R, d_inputImgArr_.G, d_inputImgArr_.B, 
+                d_outputImgArr_.R, d_outputImgArr_.G, d_outputImgArr_.B);
             execTime[step][4] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
 
             // download and free
-            outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 224, 224);
+            outputImg = tensorcv::download_merge(d_outputImgArr_.R, d_outputImgArr_.G, d_outputImgArr_.B, 224, 224);
             sprintf(filepath, "../img/output%d_rotate.jpg", step+1);
             imwrite(filepath, outputImg);
-            tensorcv::free(d_inputImgArr, d_outputImgArr);
+            tensorcv::free(d_inputImgArr_, d_outputImgArr_);
             inputImg.release();
         }
         kernel.release_rotate();
@@ -326,50 +326,65 @@ int main(int argc, char** argv )
             Mat inputImg = imread(filepath, IMREAD_COLOR );
             if ( !inputImg.data ){ printf("No image data \n"); return -1;}
             // upload and cudaMalloc
-            tensorcv::upload_split(&d_inputImgArr, &inputImg, inputImg.rows, inputImg.cols);
-            tensorcv::upload_split(&d_outputImgArr, 224, 224);
+            tensorcv::upload_split(&d_inputImgArr_, &inputImg, inputImg.rows, inputImg.cols);
+            tensorcv::upload_split(&d_outputImgArr_, 224, 224);
 
             // apply resize kernel
             auto blockStart = high_resolution_clock::now();
-            kernel.apply_normalize(handle, d_inputImgArr.R, d_inputImgArr.G, d_inputImgArr.B, 
-                d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B);
+            kernel.apply_normalize(handle, d_inputImgArr_.R, d_inputImgArr_.G, d_inputImgArr_.B, 
+                d_outputImgArr_.R, d_outputImgArr_.G, d_outputImgArr_.B);
             execTime[step][5] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
 
             // download and free
-            outputImg = tensorcv::download_merge(d_outputImgArr.R, d_outputImgArr.G, d_outputImgArr.B, 224, 224);
+            outputImg = tensorcv::download_merge(d_outputImgArr_.R, d_outputImgArr_.G, d_outputImgArr_.B, 224, 224);
             sprintf(filepath, "../img/output%d_normalize.jpg", step+1);
             imwrite(filepath, outputImg);
-            tensorcv::free(d_inputImgArr, d_outputImgArr);
+            tensorcv::free(d_inputImgArr_, d_outputImgArr_);
             inputImg.release();
         }
         kernel.release_normalize();
 
         // generate integrated kernels
+        tensorcv::imgprocKernel kernel1; // resize
+        tensorcv::imgprocKernel kernel2; // crop
+        tensorcv::imgprocKernel kernel3; // cvtcolor
+        tensorcv::imgprocKernel kernel4; // rotate
         switch (inputSize)
         {
             case 4032:
-                kernel.init_integrated(4032, 3024, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(4032, 3024, 256, 256);
                 break;
             case 3264:
-                kernel.init_integrated(3264, 2448, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(3264, 2448, 256, 256);
                 break;
             case 2592:
-                kernel.init_integrated(2592, 1936, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(2592, 1936, 256, 256);
                 break;
             case 2048:
-                kernel.init_integrated(2048, 1536, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(2048, 1536, 256, 256);
                 break; 
             case 1600:
-                kernel.init_integrated(1600, 1200, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(1600, 1200, 256, 256);
                 break; 
             case 480:
-                kernel.init_integrated(480, 320, 256, 256, 224, 224, 1, 1);
+                kernel1.init_resize(480, 320, 256, 256);
                 break;
             default:
                 printf("input size error\n");
                 break;
         }
+        kernel2.init_crop(256, 256, 224, 224);
+        kernel3.init_cvtcolor(224, 224, tensorcv::COLORCODE::RGB2YUV);
+        kernel4.init_rotate(224, 224, 1);
+
+        kernel.init_integrated(kernel1, kernel2, kernel3, kernel4);
         kernel.upload_integrated();
+
+        kernel1.release_resize();
+        kernel2.release_crop();
+        kernel3.release_cvtcolor();
+        kernel4.release_rotate();
+
         for (int step=0; step<numImg; step++) {
 
             // load image from ../img/
@@ -382,10 +397,9 @@ int main(int argc, char** argv )
 
             auto blockStart = high_resolution_clock::now();
             kernel.apply_integrated(handle, d_inputImgArr, d_outputImgArr);
-            // TODO: rearrange the order of channels
             execTime[step][6] = duration_cast<nanoseconds>(high_resolution_clock::now()-blockStart).count();
 
-            outputImg = tensorcv::download(d_outputImgArr, 224, 224, 1);
+            outputImg = tensorcv::download(d_outputImgArr, 224, 224, 2);
             sprintf(filepath, "../img/output%d_integrated.jpg", step+1);
             imwrite(filepath, outputImg);
 
@@ -413,13 +427,15 @@ int main(int argc, char** argv )
         // tensorcv::GEMMtest();
 
         // make input data
-        int iRow = 4, iCol = 4;
-
+        int iRow = 20, iCol = 20;
+        int rRow = 20, rCol = 20;
+        int oRow = 20, oCol = 20;
         uchar* test = new uchar[iRow * iCol * 3];
         for (int i = 0; i < iRow*iCol*3; i++)
             test[i] = rand() % 255;
         Mat testImg(iRow, iCol, CV_MAKETYPE(CV_8U, 3), test);
-        
+
+        // print input
         for (int i = 0; i<iRow; i++) {
             for (int j=0; j<iCol*3; j++) {
                 std::cout << (int)test[i*iCol*3+j] << " ";
@@ -428,53 +444,30 @@ int main(int argc, char** argv )
         }
         std::cout << std::endl;
 
-        // upload and cudaMalloc
-        // uchar* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
-        // uchar* d_outputImgArr = tensorcv::upload(16, 32);
-        
-        // tensorcv::imgprocKernel kernel;
+        tensorcv::imgprocKernel kernel1; // resize
+        kernel1.init_resize(iRow, iCol, rRow, rCol);
+        tensorcv::imgprocKernel kernel2; // crop
+        kernel2.init_crop(rRow, rCol, oRow, oCol);
+        tensorcv::imgprocKernel kernel3; // cvtcolor
+        kernel3.init_cvtcolor(oRow, oCol, tensorcv::COLORCODE::RGB2YUV);
+        tensorcv::imgprocKernel kernel4; // rotate
+        kernel4.init_rotate(oRow, oCol, 1);
 
-        // kernel.init_resize(iRow, iCol, 16, 16);
-        // kernel.upload_resize();
-        // kernel.apply_resize(d_inputImgArr, d_outputImgArr);
-
-        // kernel.init_crop(iRow, iCol, 16, 16);
-        // kernel.upload_crop();
-        // kernel.apply_crop(d_inputImgArr, d_outputImgArr);
-
-        // kernel.init_cvtcolor(iRow, iCol, tensorcv::RGB2BGR);
-        // kernel.upload_cvtcolor();
-        // kernel.apply_cvtcolor(d_inputImgArr, d_outputImgArr);
-
-        // kernel.init_rotate(iRow, iCol, 2);
-        // kernel.upload_rotate();
-        // kernel.apply_rotate(d_inputImgArr, d_outputImgArr);
-
-        // kernel.init_normalize(iRow, iCol, 1);
-        // kernel.upload_normalize();
-        // kernel.apply_normalize(d_inputImgArr, d_outputImgArr);
-
-        // kernel.init_integrated();
-        // kernel.upload_integrated();
-        // kernel.apply_integrated(d_inputImgArr, d_outputImgArr);
-
-// ***************************************************************************************************
-        // Normalize test
-
-        kernel.init_normalize(4, 4, 1);
-        kernel.upload_normalize();
-
-        kernel.init_integrated(4, 4, 3, 3, 2, 2, 1, 1);
+        kernel.init_integrated(kernel1, kernel2, kernel3, kernel4);
         kernel.upload_integrated();
 
+        kernel1.release_resize();
+        kernel2.release_crop();
+        kernel3.release_cvtcolor();
+        kernel4.release_rotate();
+
         half* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
-        half* d_outputImgArr = tensorcv::upload(2, 2);
+        half* d_outputImgArr = tensorcv::upload(oRow, oCol);
 
         kernel.apply_integrated(handle, d_inputImgArr, d_outputImgArr);
-        // TODO: rearrange the order of channels
 
-        outputImg = tensorcv::download(d_outputImgArr, 2, 2, 1);
-        for (int i = 0; i<outputImg.rows; i++) {
+        outputImg = tensorcv::download(d_outputImgArr, oRow, oCol, 0);
+        for (int i=0; i<outputImg.rows; i++) {
             for (int j=0; j<3*outputImg.cols; j++) {
                 std::cout << (int)(outputImg.data[i*3*outputImg.cols+j]) << " ";
             }

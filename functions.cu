@@ -44,10 +44,13 @@ __global__ void half2uchar(unsigned char* dst, half* src, int rows, int cols, in
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
     if (tx >= cols || ty >= rows) return;
-    if (transpose)
+    if (transpose == 1) {
         dst[ty*cols + tx] = (unsigned char)((float)src[tx*rows + ty] * alpha);
-    else
+    } else if (transpose == 2) {
+        dst[ty*cols + tx] = (unsigned char)((float)src[(tx/3)*cols + (3*ty+tx%3)] * alpha);
+    } else {
         dst[ty*cols + tx] = (unsigned char)((float)src[ty*cols + tx] * alpha);
+    }
 }
 
 __global__ void uchar2half_split(half* dst1, half* dst2, half* dst3, unsigned char* src, int rows, int cols, int transpose, int alpha=255){
@@ -93,7 +96,7 @@ half* tensorcv::upload ( Mat* src, int rows, int cols ){
     cudaErrCheck( cudaMalloc((void **)&input_d, rows * cols * 3 * sizeof(half)) );
     cudaErrCheck( cudaMemset(input_d, 0, rows * cols * 3 * sizeof(half)));
     
-    dim3 block(16, 16);
+    dim3 block(32, 32);
     dim3 grid((3*cols + block.x - 1) / block.x, (rows + block.y - 1) / block.y);
     uchar2half<<<grid, block>>>(input_d, src_d, rows, 3*cols, 0);
 
@@ -118,7 +121,7 @@ Mat tensorcv::download ( half* output_d, int rows, int cols, int transpose ){
     dim3 block(16, 16);
     dim3 grid((3*cols + block.x - 1) / block.x, (rows + block.y - 1) / block.y);
     half2uchar<<<grid, block>>>(dst_d, output_d, rows, 3*cols, transpose);
-
+    
     unsigned char* download_output = new unsigned char[rows * cols * 3];
     cudaErrCheck( cudaMemcpy(download_output, dst_d, rows * cols * 3 * sizeof(unsigned char), cudaMemcpyDeviceToHost) );
 
@@ -316,8 +319,9 @@ half colorPallet[6][9] = {{0,0,1,0,1,0,1,0,0},      // RGB2BGR
                            0,-0.39465,2.03211,
                            1,1,1}};                 // YUV2BGR
 
-void tensorcv::imgprocKernel::init_cvtcolor(int iRow_, int iCol_, int colorCode){
+void tensorcv::imgprocKernel::init_cvtcolor(int iRow_, int iCol_, int colorCode_){
     iRow = iRow_; iCol = iCol_;
+    colorCode = colorCode_;
 
     kernel1 = new half[3*iCol*3*iCol]();
 
@@ -624,277 +628,148 @@ void tensorcv::imgprocKernel::release_normalize(){
 // ****************************************************************************************************
 
 // GPU matmul function
-__global__ void matmul(half* src1, half* src2, half* dst, int M, int N, int K, int transpose=0){
+__global__ void matmul(half* dst, half* src1, half* src2, int M, int N, int K, int transpose=0){
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
-    if(row < M && col < N){
-        half sum = __float2half(0.0);
-        for(int i=0; i<K; i++){
-            sum = (float)sum + (float)src1[row*K+i] * (float)src2[i*N+col];
-        }
-        if (transpose == 1){
-            dst[col*M+row] = sum;
-        }
-        else{
-            dst[row*N+col] = sum;
-        }
-    }
+    if(row >= M || col >= N){return;}
+
+    half sum = __float2half(0.0);
+    for(int i=0; i<K; i++)
+        sum = __hadd(sum, __hmul(src1[row*K+i], src2[i*N+col]));
+        // sum = (float)sum + (float)src1[row*K+i] * (float)src2[i*N+col];
+
+    if (transpose == 1)
+        dst[col*M+row] = sum;
+    else
+        dst[row*N+col] = sum;
+
 }
 
-void tensorcv::imgprocKernel::init_integrated(int iRow_, int iCol_, int rRow, int rCol, int cRow, int cCol, int colorCode, int repeat_){
+void tensorcv::imgprocKernel::init_integrated(tensorcv::imgprocKernel kernel_rs, 
+                                              tensorcv::imgprocKernel kernel_cp, 
+                                              tensorcv::imgprocKernel kernel_cvt, 
+                                              tensorcv::imgprocKernel kernel_rt){
+
+    // kernel_resize -> Rs1 * input * Rs2
+    // kernel_crop -> Cp1 * input * Cp2
+    // kernel_cvt -> input * Cvt1
+    // kernel_rt -> input * Rt1
+
+    // set input and output size
+    iRow = kernel_rs.iRow;
+    iCol = kernel_rs.iCol;
+    oRow = kernel_cp.oRow;
+    oCol = kernel_cp.oCol;
+    colorCode = kernel_cvt.colorCode;
+    repeat = kernel_rt.repeat % 4;
+
+    // T( Cp1 * Rs1 * In * Rs2 * Cp2 * Cvt1 * Rt1 )
+    // T( Rs2 * Cp2 * Cv1 * Rt1 ) * T(Cp1 * Rs1 * In)
+    // T(Rs2*Cp2) * T(Cv1 * Rt1) * T(Cp1 * Rs1 * In)
+    // TT((T(Rs2*Cp2) * T(Cv1 * Rt1)) * T(Cp1 * Rs1 * In))
+
+    kernel1 = new half[oRow*iRow]();
+    kernel2 = new half[3*iCol*3*oCol]();
+    int rowCropFactor = kernel_rs.oRow/2 - oRow/2;
+    int colCropFactor = kernel_rs.oCol/2 - oCol/2;
+
+    // Cp1 * Rs1
+    for (int i=0; i<oRow; i++) {
+        for (int j=0; j<iRow; j++) {
+            kernel1[i*iRow + j] = kernel_rs.kernel1[(i+rowCropFactor)*iRow + j];
+        }
+    }
+    // T(Rs2 * Cp2)
+    for (int i=0; i<3*oCol; i++) {
+        for (int j=0; j<3*iCol; j++) {
+            kernel2[i*3*iCol + j] = kernel_rs.kernel2[(i+3*colCropFactor)*3*iCol + j];
+        }
+    }
+
+    // T(Cvt1 * Rt1)
+    kernel3 = new half[3*oCol*3*oCol]();
+    if (repeat != 1) {std::cout << "Not implemented \n"; return;}
+
+    for (int i=0; i<oCol; i++) {
+        kernel3[(3*i)*3*oCol + 3*i+2] = colorPallet[colorCode][0];
+        kernel3[(3*i)*3*oCol + 3*i+1] = colorPallet[colorCode][1];
+        kernel3[(3*i)*3*oCol + 3*i] = colorPallet[colorCode][2];
+        kernel3[(3*i+1)*3*oCol + 3*i+2] = colorPallet[colorCode][3];
+        kernel3[(3*i+1)*3*oCol + 3*i+1] = colorPallet[colorCode][4];
+        kernel3[(3*i+1)*3*oCol + 3*i] = colorPallet[colorCode][5];
+        kernel3[(3*i+2)*3*oCol + 3*i+2] = colorPallet[colorCode][6];
+        kernel3[(3*i+2)*3*oCol + 3*i+1] = colorPallet[colorCode][7];
+        kernel3[(3*i+2)*3*oCol + 3*i] = colorPallet[colorCode][8];
+    }
+
+    kernel4 = new half[3*oCol*3*oCol]();
+    for (int i=0; i<3*oCol; i++)
+        kernel4[i*3*oCol + (3*oCol-1-i)] = 1;
+
+    cudaMalloc((void**)&d_kernel3, 3*oCol * 3*oCol * sizeof(half));
+    cudaMemcpy(d_kernel3, kernel3, 3*oCol * 3*oCol * sizeof(half), cudaMemcpyHostToDevice);
     
-    iRow = iRow_;
-    iCol = iCol_;
-    oRow = cRow;
-    oCol = cCol;
-    repeat = repeat_ % 4;
+    cudaMalloc((void**)&d_kernel4, 3*oCol * 3*oCol * sizeof(half));
+    cudaMemcpy(d_kernel4, kernel4, 3*oCol * 3*oCol * sizeof(half), cudaMemcpyHostToDevice);
 
-    float rowResizeFactor = (float)rRow / (float)iRow;
-    float colResizeFactor = (float)rCol / (float)iCol;
-    float rowCropFactor = rRow/2 - cRow/2;
-    float colCropFactor = rCol/2 - cCol/2;
+    cudaMalloc((void**)&d_kernel5, 3*oCol * 3*oCol * sizeof(half));
+    cudaMemset(d_kernel5, 0, 3*oCol * 3*oCol * sizeof(half));
 
-    kernel1 = new half[cRow * iRow]();
-    kernel2 = new half[3*iCol * 3*cCol]();
-
-    for (int j=rowCropFactor; j<rRow-rowCropFactor; j++) {
-        int i = j - rowCropFactor;
-        int top = floor(j/rowResizeFactor);
-        int bot = ceil(j/rowResizeFactor);
-        float rowWeight = (float)j/rowResizeFactor - top;
-        if (rowWeight == 0) {
-            kernel1[i*iRow + top] = 1;
-        } else {
-            kernel1[i*iRow + top] = (float)(1 - rowWeight);
-            kernel1[i*iRow + bot] = (float)(rowWeight);    
-        }
-    }
-
-    for (int j=colCropFactor; j<rCol-colCropFactor; j++) { 
-        int i = j - colCropFactor;   
-        int left = floor(j/colResizeFactor);
-        int right = ceil(j/colResizeFactor);
-        float colWeight = (float)j/colResizeFactor - left;
-        if (colWeight == 0) {
-            kernel2[(3*i)*3*iCol + 3*left] = 1;
-            kernel2[(3*i+1)*3*iCol + 3*left+1] = 1;
-            kernel2[(3*i+2)*3*iCol + 3*left+2] = 1;
-        } else {
-            kernel2[(3*i)*3*iCol + 3*left] = (half)(1 - colWeight);
-            kernel2[(3*i+1)*3*iCol + 3*left+1] = (half)(1 - colWeight);
-            kernel2[(3*i+2)*3*iCol + 3*left+2] = (half)(1 - colWeight);
-            kernel2[(3*i)*3*iCol + 3*right] = (half)(colWeight);
-            kernel2[(3*i+1)*3*iCol + 3*right+1] = (half)(colWeight);
-            kernel2[(3*i+2)*3*iCol + 3*right+2] = (half)(colWeight);
-        }
-    }
-
-    kernel3 = new half[3*cCol*3*cCol]();
-    bool skip_rotate = false;
-
-    // for (int i=0; i<cCol; i++) {
-    //     kernel3[(3*i)*3*cCol + 3*i] = colorPallet[colorCode][0];
-    //     kernel3[(3*i)*3*cCol + 3*i+1] = colorPallet[colorCode][1];
-    //     kernel3[(3*i)*3*cCol + 3*i+2] = colorPallet[colorCode][2];
-    //     kernel3[(3*i+1)*3*cCol + 3*i] = colorPallet[colorCode][3];
-    //     kernel3[(3*i+1)*3*cCol + 3*i+1] = colorPallet[colorCode][4];
-    //     kernel3[(3*i+1)*3*cCol + 3*i+2] = colorPallet[colorCode][5];
-    //     kernel3[(3*i+2)*3*cCol + 3*i] = colorPallet[colorCode][6];
-    //     kernel3[(3*i+2)*3*cCol + 3*i+1] = colorPallet[colorCode][7];
-    //     kernel3[(3*i+2)*3*cCol + 3*i+2] = colorPallet[colorCode][8];
+    matmul<<<dim3((3*oCol+63)/64,3*oCol), dim3(64)>>>(d_kernel5, d_kernel3, d_kernel4, 3*oCol, 3*oCol, 3*oCol, 1);
+    
+    // load and print d_kernel3
+    // half* h_kernel5 = new half[3*oCol*3*oCol]();
+    // cudaMemcpy(h_kernel5, d_kernel5, 3*oCol * 3*oCol * sizeof(half), cudaMemcpyDeviceToHost);
+    // for (int i=0; i<3*oCol; i++){
+    //     for (int j=0; j<3*oCol; j++){
+    //         std::cout << (float) h_kernel5[i*3*oCol + j] << " ";
+    //     }
+    //     std::cout << "\n";
     // }
-    if (repeat == 1) {
-        for (int i=0; i<cCol; i++) {
-            kernel3[(3*i)*3*cCol + (i+2*cCol)] = colorPallet[colorCode][0];
-            kernel3[(3*i)*3*cCol + (i+cCol)] = colorPallet[colorCode][1];
-            kernel3[(3*i)*3*cCol + i] = colorPallet[colorCode][2];
-            kernel3[(3*i+1)*3*cCol + (i+2*cCol)] = colorPallet[colorCode][3];
-            kernel3[(3*i+1)*3*cCol + (i+cCol)] = colorPallet[colorCode][4];
-            kernel3[(3*i+1)*3*cCol + i] = colorPallet[colorCode][5];
-            kernel3[(3*i+2)*3*cCol + (i+2*cCol)] = colorPallet[colorCode][6];
-            kernel3[(3*i+2)*3*cCol + (i+cCol)] = colorPallet[colorCode][7];
-            kernel3[(3*i+2)*3*cCol + i] = colorPallet[colorCode][8];
-        }
-    } else if (repeat == 2) {
-        ; // TODO
-    } else if (repeat == 3) {
-        ; // TODO
-    } else {
-        skip_rotate = true;
-    }
 
-    if (skip_rotate) {
-        cudaMalloc((void**)&d_kernel1, cRow * iRow * sizeof(half));
-        cudaMalloc((void**)&d_kernel2, 3*iCol * 3*cCol * sizeof(half));
-        cudaMalloc((void**)&d_kernel3, 3*cCol * 3*cCol * sizeof(half));
-        cudaMemcpy(d_kernel1, kernel1, cRow * iRow * sizeof(half), cudaMemcpyHostToDevice);
-        cudaMemcpy(d_kernel2, kernel2, 3*iCol * 3*cCol * sizeof(half), cudaMemcpyHostToDevice);
-        cudaMemcpy(d_kernel3, kernel3, 3*cCol * 3*cCol * sizeof(half), cudaMemcpyHostToDevice);
+    // T(Cvt1 * Rt1) * T(Rs2 * Cp2)
+    cudaMalloc((void**)&d_kernel2, 3*iCol * 3*oCol * sizeof(half));
+    cudaMemcpy(d_kernel2, kernel2, 3*iCol * 3*oCol * sizeof(half), cudaMemcpyHostToDevice);
 
-        matmul<<<dim3((3*iCol+31)/32,3*cCol), dim3(32,1)>>>(d_kernel2, d_kernel3, d_kernel2, 3*iCol, 3*cCol, 3*cCol);
+    cudaFree(d_kernel3);
+    cudaMalloc((void**)&d_kernel3, 3*iCol * 3*oCol * sizeof(half));
+    cudaMemset(d_kernel3, 0, 3*iCol * 3*oCol * sizeof(half));
 
-        delete[] kernel3;
-        cudaFree(d_kernel3);
-    }
+    matmul<<<dim3((3*iCol+63)/64,3*oCol), dim3(64)>>>(d_kernel3, d_kernel5, d_kernel2, 3*oCol, 3*iCol, 3*oCol);
+    // cudaMemcpy(kernel2, d_kernel3, 3*iCol * 3*oCol * sizeof(half), cudaMemcpyDeviceToHost);
 
-    if (repeat % 4 == 1) {
-        kernel3 = new half[3*cCol*3*cCol]();
-        for (int i=0; i<3*cCol; i++)
-            kernel3[i*3*cCol + (3*cCol-1-i)] = 1;
-        cudaMalloc((void**)&d_kernel3, 3*cCol * 3*cCol * sizeof(half));
-        matmul<<<dim3((3*iCol+31)/32,3*cCol), dim3(32,1)>>>(d_kernel2, d_kernel3, d_kernel2, 3*iCol, 3*cCol, 3*cCol);
-        delete[] kernel3;
-        cudaFree(d_kernel3);
-
-    } else if (repeat % 4 == 2) {
-        kernel3 = new half[3*cCol*3*cCol]();
-        kernel4 = new half[cRow*cRow]();
-        for (int i=0; i<3*cCol; i++)
-            kernel3[i*3*cCol + (3*cCol-1-i)] = 1;
-        for (int i=0; i<cRow; i++)
-            kernel4[i*cRow + (cRow-1-i)] = 1;
-        cudaMalloc((void**)&d_kernel3, 3*cCol * 3*cCol * sizeof(half));
-        cudaMalloc((void**)&d_kernel4, cRow * cRow * sizeof(half));
-        matmul<<<dim3((cRow+31)/32,iRow), dim3(32,1)>>>(d_kernel4, d_kernel1, d_kernel1, cRow, iRow, cRow); 
-        matmul<<<dim3((3*iCol+31)/32,3*cCol), dim3(32,1)>>>(d_kernel2, d_kernel3, d_kernel2, 3*iCol, 3*cCol, 3*cCol);
-        delete[] kernel3;
-        delete[] kernel4;
-        cudaFree(d_kernel3);
-        cudaFree(d_kernel4);
-        
-    } else if (repeat % 4 == 3) {
-        kernel4 = new half[3*cRow*3*cRow]();
-        for (int i=0; i<3*cRow; i++)
-            kernel4[i*3*cRow + (3*cRow-1-i)] = 1;
-        cudaMalloc((void**)&d_kernel4, cRow * cRow * sizeof(half));
-        matmul<<<dim3((cRow+31)/32,iRow), dim3(32,1)>>>(d_kernel4, d_kernel1, d_kernel1, cRow, iRow, cRow); 
-        delete[] kernel4;
-        cudaFree(d_kernel4);
-
-    } else {
-        std::cout << "WORTH NOTHING: 360-degree rotation \n";
-        return;
-    }
+    delete[] kernel3;
+    delete[] kernel4;
+    cudaFree(d_kernel2);
+    cudaFree(d_kernel4);
+    cudaFree(d_kernel5);
 }
 
 void tensorcv::imgprocKernel::upload_integrated(){
     cudaErrCheck( cudaMalloc((void **)&d_kernel1, oRow * iRow * sizeof(half)) );
     cudaErrCheck( cudaMemcpy(d_kernel1, kernel1, oRow * iRow  * sizeof(half), cudaMemcpyHostToDevice) );
-    cudaErrCheck( cudaMalloc((void **)&d_kernel2, iCol*3 * oCol*3 * sizeof(half)) );
-    cudaErrCheck( cudaMemcpy(d_kernel2, kernel2, iCol*3 * oCol*3  * sizeof(half), cudaMemcpyHostToDevice) );
+    // cudaErrCheck( cudaMalloc((void **)&d_kernel2, iCol*3 * oCol*3 * sizeof(half)) );
+    // cudaErrCheck( cudaMemcpy(d_kernel2, kernel2, iCol*3 * oCol*3  * sizeof(half), cudaMemcpyHostToDevice) );
     cudaErrCheck( cudaMalloc((void **)&d_temp1, oRow * 3 * iCol * sizeof(half)) );
-
 }
 
 void tensorcv::imgprocKernel::apply_integrated(cublasHandle_t handle, half* src, half* dst){
     const half alpha = 1.0;
     const half beta = 0.0;
+    // T(Cp1 * Rs1 * In)
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, oRow, 3*iCol, iRow,
                                     &alpha, d_kernel1, CUDA_R_16F, iRow, src, CUDA_R_16F, 3*iCol, 
                                     &beta, d_temp1, CUDA_R_16F, oRow,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
+    // T( T(Cvt1 * Rt1) * T(Rs2 * Cp2) * T(Cp1 * Rs1 * In))
     cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, 3*oCol, oRow, 3*iCol, 
-                                    &alpha, d_kernel2, CUDA_R_16F, 3*iCol, d_temp1, CUDA_R_16F, oRow, 
-                                    &beta, dst, CUDA_R_16F, 3*oCol, 
+                                    &alpha, d_kernel3, CUDA_R_16F, 3*iCol, d_temp1, CUDA_R_16F, oRow, 
+                                    &beta, dst, CUDA_R_16F, 3*oCol,
                                     CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
 }
 
 void tensorcv::imgprocKernel::release_integrated(){
     cudaFree(d_kernel1);
-    cudaFree(d_kernel2);
+    cudaFree(d_kernel3);
     cudaFree(d_temp1);
 }
-
-// ****************************************************************************************************
-// GEMM Test
-// ****************************************************************************************************
-
-// void tensorcv::GEMMtest() {
-//     cublasHandle_t handle;
-//     cublasCreate(&handle);
-
-//     int M = 4;
-//     int N = 4;
-//     int K = 4;
-
-//     half *h_A, *h_B;
-//     half *h_C;
-//     cudaMallocHost(&h_A, M * K * sizeof(half));
-//     cudaMallocHost(&h_B, K * N * sizeof(half));
-//     cudaMallocHost(&h_C, M * N * sizeof(half));
-
-//     // initialize h_A and h_B
-//     for (int i = 0; i < M * K; i++)
-//         h_A[i] = (half)(rand() % 128);
-//     for (int i = 0; i < K * N; i++)
-//         h_B[i] = (half)(rand() % 2);
-
-//     // copy h_A and h_B to device
-//     half *d_A, *d_B;
-//     half *d_C;
-//     cudaMalloc(&d_A, M * K * sizeof(half));
-//     cudaMalloc(&d_B, K * N * sizeof(half));
-//     cudaMalloc(&d_C, M * N * sizeof(half));
-//     cudaMemcpy(d_A, h_A, M * K * sizeof(half), cudaMemcpyHostToDevice);
-//     cudaMemcpy(d_B, h_B, K * N * sizeof(half), cudaMemcpyHostToDevice);
-//     cudaMemset(d_C, 0, M * N * sizeof(half));
-
-//     for(int i=0; i<M; i++) {
-//         for(int j=0; j<K; j++) {
-//             std::cout << (float)h_A[i*K+j] << " ";
-//         }
-//         std::cout << std::endl;
-//     }
-//     std::cout << std::endl;
-//     for(int i=0; i<K; i++) {
-//         for(int j=0; j<N; j++) {
-//             std::cout << (float)h_B[i*N+j] << " ";
-//         }
-//         std::cout << std::endl;
-//     }
-//     std::cout << std::endl;
-
-//     // launch kernel
-//     const half alpha = 1;
-//     const half beta = 0;
-
-//     long long execution_time = 0;
-//     for (int i=0; i<100; i++) {
-//         auto blockStart = std::chrono::high_resolution_clock::now();
-//         cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, M, N, K, 
-//                                      &alpha, d_A, CUDA_R_16F, K, d_B, CUDA_R_16F, N, 
-//                                      &beta, d_C, CUDA_R_16F, M, 
-//                                      CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
-//         // cublasErrCheck( cublasGemmEx(handle, CUBLAS_OP_T, CUBLAS_OP_T, M/2, N, K, 
-//         //                              &alpha, d_A, CUDA_R_16F, K*2, d_B, CUDA_R_16F, N, 
-//         //                              &beta, d_C, CUDA_R_16F, M/2,
-//         //                              CUBLAS_COMPUTE_16F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) );
-//         if(i != 0)
-//             execution_time += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now()-blockStart).count();
-//     }
-//     std::cout << "Imgproc: " << execution_time/99 << std::endl;
-
-//     cudaMemcpy(h_C, d_C, M * N * sizeof(half), cudaMemcpyDeviceToHost);
-
-//     // C is transposed
-//     for(int i=0; i<M; i++) {
-//         for(int j=0; j<N; j++) {
-//             std::cout << (float)h_C[j*M+i] << " ";
-//         }
-//         std::cout << std::endl;
-//     }
-//     std::cout << std::endl;
-
-//     // for(int i=0; i<M; i++) {
-//     //     for(int j=0; j<N; j++) {
-//     //         std::cout << (float)h_C[i*N+j] << " ";
-//     //     }
-//     //     std::cout << std::endl;
-//     // }
-//     // std::cout << std::endl;
-
-//     // Free the memory
-//     cudaFree(d_A);
-//     cudaFree(d_B);
-//     cudaFree(d_C);
-// }
