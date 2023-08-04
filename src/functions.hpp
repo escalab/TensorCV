@@ -20,8 +20,6 @@ enum COLORCODE {
     YUV2BGR
 };
 
-void GEMMtest();
-
 typedef struct splitted_src_ {
     half* R = NULL;
     half* G = NULL;
@@ -98,12 +96,6 @@ class imgprocKernel {
         half* d_temp1 = NULL;
         half* d_temp2 = NULL;
         half* d_temp3 = NULL;
-        // half* d_temp4 = NULL;
-        // half* d_temp5 = NULL;
-        // half* d_temp6 = NULL;
-        // half* d_temp7 = NULL;
-        // half* d_temp8 = NULL;
-        // half* d_temp9 = NULL;
 };
 
 }

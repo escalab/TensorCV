@@ -15,8 +15,8 @@ find_package( CUDA REQUIRED )
 include_directories( ${CUDA_INCLUDE_DIRS} )
 
 # Add excutable
-cuda_compile(CUDA_OBJECT functions.cu)
-set( SOURCES test.cpp )
+cuda_compile(CUDA_OBJECT src/functions.cu)
+set( SOURCES src/test.cpp )
 add_executable( ${PROJECT_NAME} ${SOURCES} ${CUDA_OBJECT})
 
 # Linking

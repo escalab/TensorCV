@@ -10,7 +10,8 @@ int main(int argc, char** argv )
     }
 
     // check GPUs
-    std::cout << "We have " << cuda::getCudaEnabledDeviceCount() << " GPUs" << "\n";
+    std::cout << "* TensorCV is running" << "\n";
+    std::cout << "* We have " << cuda::getCudaEnabledDeviceCount() << " GPUs" << "\n";
 
     int long long execution_time = 0;
     int numImg = 20;
@@ -20,7 +21,6 @@ int main(int argc, char** argv )
     // mode 1 : GPU
     // mode 2 : TensorCV
     // mode 3 : all
-    // mode 4 : test
     int mode;
 
     if(strcmp(argv[1],"CPU") == 0) mode = 0;
@@ -45,8 +45,9 @@ int main(int argc, char** argv )
     
 // ***************************************************************************************************
 
-    std::cout << "OpenCV img preprocessing with CPU" << std::endl;
-    std::cout << "Iter resiz center cvt rotate norm" << std::endl;
+    std::cout << "\n";
+    std::cout << "* OpenCV img preprocessing with CPU" << "\n";
+    std::cout << "Iter resiz center cvt rotate norm" << "\n";
 
     // declare variables
     Mat outputImg, smallImg, outputImg_rgb[3];
@@ -101,8 +102,9 @@ int main(int argc, char** argv )
 
 // ***************************************************************************************************
 
-    std::cout << "OpenCV img preprocessing with GPU" << std::endl;
-    std::cout << "Iter resiz center cvt rotate norm" << std::endl;
+    std::cout << "\n";
+    std::cout << "* OpenCV img preprocessing with GPU" << "\n";
+    std::cout << "Iter resiz center cvt rotate norm" << "\n";
 
     cuda::GpuMat inputImg_gpu, outputImg_gpu, outputImg_gpu_rgb[3];
 
@@ -171,8 +173,9 @@ int main(int argc, char** argv )
     cublasHandle_t handle;
     cublasCreate(&handle);
 
-    std::cout << "Img preprocessing with TensorCV" << std::endl;
-    std::cout << "Iter resiz center cvt rotate norm integ" << std::endl;
+    std::cout << "\n";
+    std::cout << "* Img preprocessing with TensorCV" << "\n";
+    std::cout << "Iter resiz center cvt rotate norm integ" << "\n";
     long int execTime[numImg][7] = {0};
 
     if (mode == 2 || mode == 3) {
@@ -418,61 +421,6 @@ int main(int argc, char** argv )
             std::cout << execTime[step][6] << "\n";
         } 
     }
-
-// ***************************************************************************************************
-// Test functions
-// ***************************************************************************************************
-
-    if (mode == 4) {
-        // tensorcv::GEMMtest();
-
-        // make input data
-        int iRow = 20, iCol = 20;
-        int rRow = 20, rCol = 20;
-        int oRow = 20, oCol = 20;
-        uchar* test = new uchar[iRow * iCol * 3];
-        for (int i = 0; i < iRow*iCol*3; i++)
-            test[i] = rand() % 255;
-        Mat testImg(iRow, iCol, CV_MAKETYPE(CV_8U, 3), test);
-
-        // print input
-        for (int i = 0; i<iRow; i++) {
-            for (int j=0; j<iCol*3; j++) {
-                std::cout << (int)test[i*iCol*3+j] << " ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-
-        tensorcv::imgprocKernel kernel1; // resize
-        kernel1.init_resize(iRow, iCol, rRow, rCol);
-        tensorcv::imgprocKernel kernel2; // crop
-        kernel2.init_crop(rRow, rCol, oRow, oCol);
-        tensorcv::imgprocKernel kernel3; // cvtcolor
-        kernel3.init_cvtcolor(oRow, oCol, tensorcv::COLORCODE::RGB2YUV);
-        tensorcv::imgprocKernel kernel4; // rotate
-        kernel4.init_rotate(oRow, oCol, 1);
-
-        kernel.init_integrated(kernel1, kernel2, kernel3, kernel4);
-        kernel.upload_integrated();
-
-        kernel1.release_resize();
-        kernel2.release_crop();
-        kernel3.release_cvtcolor();
-        kernel4.release_rotate();
-
-        half* d_inputImgArr = tensorcv::upload(&testImg, testImg.rows, testImg.cols);
-        half* d_outputImgArr = tensorcv::upload(oRow, oCol);
-
-        kernel.apply_integrated(handle, d_inputImgArr, d_outputImgArr);
-
-        outputImg = tensorcv::download(d_outputImgArr, oRow, oCol, 0);
-        for (int i=0; i<outputImg.rows; i++) {
-            for (int j=0; j<3*outputImg.cols; j++) {
-                std::cout << (int)(outputImg.data[i*3*outputImg.cols+j]) << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
+    
     return 0;
 }
