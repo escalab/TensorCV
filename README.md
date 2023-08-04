@@ -11,9 +11,15 @@ CUDA: 11.7
 ```
 
 # Build
-Setup environment
+
 We recommend you to use the docker image nvidia/cuda:11.7.0-devel-ubuntu20.04 
 (https://hub.docker.com/r/nvidia/cuda)
+```
+docker run -itd --name <name> --gpus all nvidia/cuda:11.7.0-devel-ubuntu20.04
+docker exec -it <name> bash
+```
+
+Setup environment
 ```
 apt update
 apt-get install -y build-essential git cmake make
