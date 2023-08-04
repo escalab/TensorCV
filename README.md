@@ -1,5 +1,5 @@
 # TensorCV
-This repo conatins artifacts of the TensorCV project.
+This repo contains artifacts of the TensorCV project.
 
 # Environment
 ```
@@ -12,7 +12,7 @@ CUDA: 11.7
 
 # Build
 Setup environment
-We recommand yout to use docker image nvidia/cuda:11.7.0-devel-ubuntu20.04 
+We recommend you to use the docker image nvidia/cuda:11.7.0-devel-ubuntu20.04 
 (https://hub.docker.com/r/nvidia/cuda)
 ```
 apt update
@@ -45,7 +45,7 @@ MODE: CPU/GPU/CV/ALL
 SIZE: 480 / 1600 / 2048 / 2592 / 3264 / 4032
 ```
 
-This repository only provide 20 images as a sample
+This repository only provides 20 images as samples
 |SIZE | Input image size (directory) |
 |-|-|
 |`480`  | 480 x 320 (img/480)
