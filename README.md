@@ -12,6 +12,7 @@ CUDA: 11.7
 
 # Build
 Setup environment
+We recommand yout to use docker image nvidia/cuda:11.7.0-devel-ubuntu20.04
 ```
 apt update
 apt-get install -y build-essential git cmake make
@@ -19,7 +20,7 @@ apt-get install -y build-essential git cmake make
 
 Install CUDA (https://developer.nvidia.com/cuda-downloads)
 
-Install opencv opencv_contrib with cuda support (https://opencv.org/)
+Install opencv and opencv_contrib with cuda support (https://opencv.org/)
 ```
 git clone https://github.com/opencv/opencv.git
 git clone https://github.com/opencv/opencv_contrib.git
@@ -38,5 +39,17 @@ make
 
 # Run
 ```
-./cvTest
+./cvTest <MODE> <SIZE>
+MODE: CPU/GPU/CV/ALL
+SIZE: 480 / 1600 / 2048 / 2592 / 3264 / 4032
 ```
+
+This repository only provide 20 images as a sample
+|SIZE | Input image size (directory) |
+|-|-|
+|`480`  | 480 x 320 (img/480)
+|`1600` | 1600 x 1200 (img/1600)
+|`2048` | 2048 x 1536 (img/2048)
+|`2592` | 2592 x 1936 (img/2592)
+|`3264` | 3264 x 2448 (img/3264)
+|`4032` | 4032 x 3024 (img/4032)
