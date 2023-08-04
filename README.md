@@ -40,6 +40,7 @@ make
 
 # Run
 ```
+./cvTest CV 4032 # Run TensorCV part only with 4032x3024 input images
 ./cvTest <MODE> <SIZE>
 MODE: CPU/GPU/CV/ALL
 SIZE: 480 / 1600 / 2048 / 2592 / 3264 / 4032
